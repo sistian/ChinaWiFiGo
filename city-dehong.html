@@ -22,7 +22,16 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo.jpg">
 <link rel="manifest" href="manifest.json">
+    <!-- ===== Security Headers (Static HTML Fallback) ===== -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -108,11 +117,11 @@
 <div class="city-info-grid">
   <div class="city-info-card">
     <h3><i class="fas fa-ruler-combined"></i> Area & Population</h3>
-    <p><strong>Area:</strong> Area data available<br><strong>Population:</strong> Population data available</p>
+    <p><strong>Area:</strong> 11,526 km² (autonomous prefecture, capital Mangshi)<br><strong>Population:</strong> Approximately 1.3 million (prefecture, 2020 census)</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-history"></i> Name Origin</h3>
-    <p>Dehong (德宏) is a vibrant city in China with rich cultural heritage and modern development.</p>
+    <p>Dehong means "auspicious downriver" in Chinese. It is a Dai and Jingpo Autonomous Prefecture in western Yunnan, bordering Myanmar.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-smile"></i> Happiness Index</h3>
@@ -120,36 +129,36 @@
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-subway"></i> Metro & Transport</h3>
-    <p>Transport details available</p>
+    <p>Dehong Mangshi International Airport (LUM) offers domestic flights to Kunming and other cities. Buses and taxis serve Mangshi, Ruili, and other counties; no railway yet (under construction).</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-graduation-cap"></i> Universities</h3>
-    <p>University info available</p>
+    <p>Dehong Vocational College is the main local higher-education institution.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-leaf"></i> Natural Resources</h3>
-    <p>Beautiful natural landscapes including rivers, mountains, and green spaces.</p>
+    <p>Dehong has a tropical monsoon climate with rainforests, rivers, and fertile valleys. It is famous for jade, tropical fruits, and border trade with Myanmar.</p>
   </div>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-camera"></i> Attractions in Dehong</h2>
-  <p>Historical sites, modern landmarks, cultural venues, and natural parks.</p>
+  <p>Visit the One-Tree Forest in Ruili, Wanding Bridge, Jiele Golden Pagoda, Mengbanaxi Rare Garden, and the Ruili border port with Myanmar.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-route"></i> Popular Routes</h2>
-  <p>Day 1: City center exploration; Day 2: Natural attractions and cultural sites; Day 3: Local markets and modern landmarks.</p>
+  <p><strong>Day 1:</strong> Visit Mangshi's Jiele Pagoda and Mengbanaxi Garden.<br><strong>Day 2:</strong> Day trip to Ruili for the border and One-Tree Forest.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-utensils"></i> Food & Dining</h2>
-  <p>Diverse culinary scene with local specialties, street food, and regional cuisine.</p>
+  <p>Try Dai-style sour and spicy fish, bamboo rice, pineapple rice, Myanmar-influenced dishes, and tropical fruits such as mango and pineapple.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-shopping-bag"></i> Shopping</h2>
-  <p>Pedestrian streets, modern malls, local markets, and specialty stores.</p>
+  <p>Ruili jade, Burmese gems and goods, tropical fruits, Dai crafts, and Pu'er tea are popular. Main markets are in Ruili and Mangshi.</p>
 </div>
 
 <div class="city-cta" style="margin-top:3rem;">
@@ -257,5 +266,6 @@ function handleWhatsAppModalOutsideClick(e) {
     }
 }
 </script>
+<script src="security.js" defer></script>
 </body>
 </html>

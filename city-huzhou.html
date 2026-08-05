@@ -22,7 +22,16 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo.jpg">
 <link rel="manifest" href="manifest.json">
+    <!-- ===== Security Headers (Static HTML Fallback) ===== -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -108,11 +117,11 @@
 <div class="city-info-grid">
   <div class="city-info-card">
     <h3><i class="fas fa-ruler-combined"></i> Area & Population</h3>
-    <p><strong>Area:</strong> Area data available<br><strong>Population:</strong> Population data available</p>
+    <p><strong>Area:</strong> 5,820 km² (prefecture-level city)<br><strong>Population:</strong> Approximately 3.4 million (2020 census)</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-history"></i> Name Origin</h3>
-    <p>Huzhou (湖州) is a vibrant city in China with rich cultural heritage and modern development.</p>
+    <p>Huzhou means "lake state" in Chinese, named for its location on the shore of Taihu Lake. It has been a center of silk and tea production for over 2,000 years.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-smile"></i> Happiness Index</h3>
@@ -120,36 +129,36 @@
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-subway"></i> Metro & Transport</h3>
-    <p>Transport details available</p>
+    <p>Huzhou has no commercial airport; the nearest airports are in Hangzhou and Shanghai. Huzhou Railway Station and Huzhou South Station connect to Hangzhou, Nanjing, and other cities on the Nanjing–Hangzhou high-speed railway. Buses and taxis serve the city.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-graduation-cap"></i> Universities</h3>
-    <p>University info available</p>
+    <p>Huzhou University and Huzhou Vocational and Technical College are the main local higher-education institutions.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-leaf"></i> Natural Resources</h3>
-    <p>Beautiful natural landscapes including rivers, mountains, and green spaces.</p>
+    <p>Huzhou lies on the southern shore of Taihu Lake with a humid subtropical climate. It has lakes, rivers, bamboo forests, and the famous Mogan Mountain nearby.</p>
   </div>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-camera"></i> Attractions in Huzhou</h2>
-  <p>Historical sites, modern landmarks, cultural venues, and natural parks.</p>
+  <p>Visit Taihu Lake scenic area, Feiying Pagoda, Mogan Mountain, Nanxun Ancient Town, and the Anji Bamboo Forest.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-route"></i> Popular Routes</h2>
-  <p>Day 1: City center exploration; Day 2: Natural attractions and cultural sites; Day 3: Local markets and modern landmarks.</p>
+  <p><strong>Day 1:</strong> Visit Feiying Pagoda and Taihu Lake.<br><strong>Day 2:</strong> Day trip to Nanxun Ancient Town or Mogan Mountain.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-utensils"></i> Food & Dining</h2>
-  <p>Diverse culinary scene with local specialties, street food, and regional cuisine.</p>
+  <p>Try Taihu whitefish, Huzhou zongzi, Anji bamboo shoots, freshwater crab, and Hangzhou-influenced Jiangsu-Zhejiang dishes.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-shopping-bag"></i> Shopping</h2>
-  <p>Pedestrian streets, modern malls, local markets, and specialty stores.</p>
+  <p>Buy silk products, Anji white tea, bamboo crafts, Taihu pearls, and freshwater fish products. Nanxun Ancient Town is a great place for local crafts.</p>
 </div>
 
 <div class="city-cta" style="margin-top:3rem;">
@@ -257,5 +266,6 @@ function handleWhatsAppModalOutsideClick(e) {
     }
 }
 </script>
+<script src="security.js" defer></script>
 </body>
 </html>

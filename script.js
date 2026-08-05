@@ -119,10 +119,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Loading Animation - Digital Earth · Global Connection
     // ============================================
     const loadingScreen = document.getElementById('loading-screen');
-    
+
     if (loadingScreen) {
         document.body.style.overflow = 'hidden';
-        
+
         // Generate random particles for starfield effect
         const particlesContainer = document.getElementById('particles');
         if (particlesContainer) {
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 particlesContainer.appendChild(particle);
             }
         }
-        
+
         // Total loading sequence: 2.8 seconds then fade out
         setTimeout(() => {
             loadingScreen.classList.add('hidden');
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         document.body.style.overflow = 'auto';
     }
-    
+
     // ============================================
     // Scroll Reveal Animations (IntersectionObserver)
     // ============================================
@@ -166,61 +166,65 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
-        
+
         animatedElements.forEach(el => observer.observe(el));
     }
-    
+
     // ============================================
     // Navigation Scroll Effect
     // ============================================
     const nav = document.getElementById('main-nav');
     let lastScroll = 0;
     
-    window.addEventListener('scroll', function() {
-        const currentScroll = window.pageYOffset;
-        
-        // Add/remove scrolled class
-        if (currentScroll > 50) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
-        
-        lastScroll = currentScroll;
-    });
-    
+    if (nav) {
+        window.addEventListener('scroll', function() {
+            const currentScroll = window.pageYOffset;
+            
+            // Add/remove scrolled class
+            if (currentScroll > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+    }
+
     // ============================================
     // Mobile Menu Toggle
     // ============================================
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const mobileMenu = document.querySelector('.mobile-menu');
     
-    mobileMenuBtn.addEventListener('click', function() {
-        mobileMenu.classList.toggle('active');
-        
-        // Animate hamburger to X
-        const spans = mobileMenuBtn.querySelectorAll('span');
-        if (mobileMenu.classList.contains('active')) {
-            spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-            spans[1].style.opacity = '0';
-            spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-        } else {
-            spans[0].style.transform = 'none';
-            spans[1].style.opacity = '1';
-            spans[2].style.transform = 'none';
-        }
-    });
-    
-    // Close mobile menu when clicking a link
-    document.querySelectorAll('.mobile-link').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            
+            // Animate hamburger to X
             const spans = mobileMenuBtn.querySelectorAll('span');
-            spans[0].style.transform = 'none';
-            spans[1].style.opacity = '1';
-            spans[2].style.transform = 'none';
+            if (mobileMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
         });
-    });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                const spans = mobileMenuBtn.querySelectorAll('span');
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            });
+        });
+    }
     
     // ============================================
     // Smooth Scroll for Anchor Links
@@ -239,27 +243,29 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
+
     // ============================================
     // Back to Top Button
     // ============================================
     const backToTop = document.getElementById('back-to-top');
     
-    window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 500) {
-            backToTop.classList.add('visible');
-        } else {
-            backToTop.classList.remove('visible');
-        }
-    });
-    
-    backToTop.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    if (backToTop) {
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
         });
-    });
-    
+
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
     // ============================================
     // Scroll Animations (Intersection Observer)
     // ============================================
@@ -268,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rootMargin: '0px',
         threshold: 0.1
     };
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -277,43 +283,43 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, observerOptions);
-    
+
     // Observe elements with animation classes
     document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in').forEach(el => {
         observer.observe(el);
     });
-    
+
     // Add animation classes to sections on load
     const animateOnLoad = () => {
         document.querySelectorAll('.feature-card').forEach((card, index) => {
             card.classList.add('fade-in', `delay-${Math.min(index + 1, 5)}`);
             observer.observe(card);
         });
-        
+
         document.querySelectorAll('.step').forEach((step, index) => {
             step.classList.add('fade-in', `delay-${Math.min(index + 1, 5)}`);
             observer.observe(step);
         });
-        
+
         document.querySelectorAll('.pricing-card').forEach((card, index) => {
             card.classList.add('scale-in', `delay-${Math.min(index + 1, 5)}`);
             observer.observe(card);
         });
-        
+
         document.querySelectorAll('.testimonial-card').forEach((card, index) => {
             card.classList.add('fade-in', `delay-${Math.min(index + 1, 5)}`);
             observer.observe(card);
         });
-        
+
         document.querySelectorAll('.city-tag').forEach((tag, index) => {
             tag.classList.add('scale-in', `delay-${Math.min((index % 5) + 1, 5)}`);
             observer.observe(tag);
         });
     };
-    
+
     // Run after loading animation completes
     setTimeout(animateOnLoad, 3500);
-    
+
     // ============================================
     // Stats Counter Animation
     // ============================================
@@ -330,13 +336,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 30);
     };
-    
+
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const statNumber = entry.target.querySelector('.stat-number');
                 const text = statNumber.textContent;
-                
+
                 if (text.includes('200+')) {
                     animateCounter(statNumber, 200, '+');
                 } else if (text.includes('5G')) {
@@ -346,21 +352,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (text.includes('24/7')) {
                     statNumber.textContent = '24/7';
                 }
-                
+
                 statsObserver.unobserve(entry.target);
             }
         });
     }, { threshold: 0.5 });
-    
+
     document.querySelectorAll('.stat-item').forEach(stat => {
         statsObserver.observe(stat);
     });
-    
+
     // ============================================
     // Parallax Effect for Hero Orbs
     // ============================================
     const heroOrbs = document.querySelectorAll('.hero-bg .gradient-orb');
-    
+
     window.addEventListener('scroll', function() {
         const scrolled = window.pageYOffset;
         heroOrbs.forEach((orb, index) => {
@@ -368,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
             orb.style.transform = `translateY(${scrolled * speed}px)`;
         });
     });
-    
+
     // ============================================
     // Pricing Card Hover Effect
     // ============================================
@@ -380,27 +386,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
-        
+
         card.addEventListener('mouseleave', function() {
             document.querySelectorAll('.pricing-card.popular').forEach(popular => {
                 popular.style.transform = 'scale(1.05)';
             });
         });
     });
-    
+
     // ============================================
     // Form Input Focus Effects (if forms exist)
     // ============================================
     document.querySelectorAll('input, textarea, select').forEach(input => {
         input.addEventListener('focus', function() {
-            this.parentElement.classList.add('focused');
+            if (this.parentElement) this.parentElement.classList.add('focused');
         });
         
         input.addEventListener('blur', function() {
-            this.parentElement.classList.remove('focused');
+            if (this.parentElement) this.parentElement.classList.remove('focused');
         });
     });
-    
+
     // ============================================
     // Dynamic Year in Footer
     // ============================================
@@ -408,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function() {
     yearElements.forEach(el => {
         el.textContent = new Date().getFullYear();
     });
-    
+
     // ============================================
     // Performance: Pause animations when tab is hidden
     // ============================================
@@ -464,7 +470,7 @@ if ('IntersectionObserver' in window) {
             }
         });
     });
-    
+
     document.querySelectorAll('img.lazy').forEach(img => {
         imageObserver.observe(img);
     });
@@ -482,7 +488,7 @@ function openQRModal(type, title) {
         case 'instagram': src = 'qr-instagram.png'; break;
         case 'facebook': src = 'qr-facebook.png'; break;
     }
-    
+
     let overlay = document.createElement('div');
     overlay.className = 'qr-modal-overlay active';
     overlay.innerHTML = `
@@ -526,7 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function switchLanguage(lang) {
     const currentPage = window.location.pathname;
     let targetPage = '';
-    
+
     if (currentPage.includes('index-zh-tw')) {
         if (lang === 'en') targetPage = 'index.html';
         else if (lang === 'zh') targetPage = 'index-zh.html';
@@ -537,7 +543,7 @@ function switchLanguage(lang) {
         if (lang === 'zh') targetPage = 'index-zh.html';
         else if (lang === 'zh-tw') targetPage = 'index-zh-tw.html';
     }
-    
+
     if (targetPage) {
         window.location.href = targetPage;
     }
@@ -557,18 +563,18 @@ function goToBooking() {
     const loadingScreen = document.getElementById('loading-screen');
     const wifiAnimation = document.getElementById('wifi-animation');
     const chinaHighlight = document.getElementById('china-highlight');
-    
+
     if (loadingScreen && wifiAnimation) {
         // Step 1: Show Earth animation for 3 seconds
         setTimeout(() => {
             // Step 2: Highlight China region on Earth
             if (chinaHighlight) chinaHighlight.classList.add('active');
-            
+
             // Step 3: After 1.5s showing China, fade to WiFi
             setTimeout(() => {
                 loadingScreen.classList.add('hidden');
                 wifiAnimation.classList.add('active');
-                
+
                 // Step 4: Show WiFi animation for 2.5 seconds
                 setTimeout(() => {
                     wifiAnimation.classList.add('fade-out');
@@ -580,7 +586,7 @@ function goToBooking() {
                 }, 2500);
             }, 1500);
         }, 3000);
-        
+
         document.body.style.overflow = 'hidden';
     }
 })();

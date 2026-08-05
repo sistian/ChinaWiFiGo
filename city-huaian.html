@@ -22,7 +22,16 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo.jpg">
 <link rel="manifest" href="manifest.json">
+    <!-- ===== Security Headers (Static HTML Fallback) ===== -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -108,11 +117,11 @@
 <div class="city-info-grid">
   <div class="city-info-card">
     <h3><i class="fas fa-ruler-combined"></i> Area & Population</h3>
-    <p><strong>Area:</strong> Area data available<br><strong>Population:</strong> Population data available</p>
+    <p><strong>Area:</strong> 10,072 km² (prefecture-level city)<br><strong>Population:</strong> Approximately 4.6 million (2020 census)</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-history"></i> Name Origin</h3>
-    <p>Huaian (淮安) is a vibrant city in China with rich cultural heritage and modern development.</p>
+    <p>Huai'an means "peace on the Huai" in Chinese. It is located on the Grand Canal in northern Jiangsu and was a major canal port and grain transport center during imperial times.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-smile"></i> Happiness Index</h3>
@@ -120,36 +129,36 @@
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-subway"></i> Metro & Transport</h3>
-    <p>Transport details available</p>
+    <p>Huai'an Lianshui Airport (HIA) offers domestic flights. Huai'an Railway Station and Huai'an East Station connect to Beijing, Shanghai, and other cities on the Lianyungang–Zhenjiang high-speed railway. Buses and taxis serve the city.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-graduation-cap"></i> Universities</h3>
-    <p>University info available</p>
+    <p>Huaiyin Normal University and Huai'an Vocational and Technical College are the main local higher-education institutions.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-leaf"></i> Natural Resources</h3>
-    <p>Beautiful natural landscapes including rivers, mountains, and green spaces.</p>
+    <p>Huai'an lies on the Jiangsu plain where the Grand Canal and Huai River meet. It has a humid subtropical climate, lakes, and wetlands, including Hongze Lake (partly within the prefecture).</p>
   </div>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-camera"></i> Attractions in Huaian</h2>
-  <p>Historical sites, modern landmarks, cultural venues, and natural parks.</p>
+  <p>Visit the Zhou Enlai Memorial Hall, Huai'an Canal Cultural Corridor, Qingyan Garden, Hongze Lake, and the Former Residence of Zhou Enlai.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-route"></i> Popular Routes</h2>
-  <p>Day 1: City center exploration; Day 2: Natural attractions and cultural sites; Day 3: Local markets and modern landmarks.</p>
+  <p><strong>Day 1:</strong> Visit the Zhou Enlai Memorial Hall and Former Residence.<br><strong>Day 2:</strong> Walk the Canal Cultural Corridor and visit Qingyan Garden.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-utensils"></i> Food & Dining</h2>
-  <p>Diverse culinary scene with local specialties, street food, and regional cuisine.</p>
+  <p>Try Huaiyang cuisine dishes such as soft-shelled turtle soup, lion's head meatballs, Huai'an noodles, and tea-dried duck. Huai'an is part of the Huaiyang culinary tradition.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-shopping-bag"></i> Shopping</h2>
-  <p>Pedestrian streets, modern malls, local markets, and specialty stores.</p>
+  <p>Huaiyang pickles, canal-themed souvenirs, tea-dried duck, and local snacks are popular. Main shopping is around Qingjiangpu District and the canal area.</p>
 </div>
 
 <div class="city-cta" style="margin-top:3rem;">
@@ -257,5 +266,6 @@ function handleWhatsAppModalOutsideClick(e) {
     }
 }
 </script>
+<script src="security.js" defer></script>
 </body>
 </html>

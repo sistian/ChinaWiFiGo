@@ -22,7 +22,16 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo.jpg">
 <link rel="manifest" href="manifest.json">
+    <!-- ===== Security Headers (Static HTML Fallback) ===== -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -108,11 +117,11 @@
 <div class="city-info-grid">
   <div class="city-info-card">
     <h3><i class="fas fa-ruler-combined"></i> Area & Population</h3>
-    <p><strong>Area:</strong> Area data available<br><strong>Population:</strong> Population data available</p>
+    <p><strong>Area:</strong> 16,313 km² (prefecture-level city)<br><strong>Population:</strong> Approximately 2.4 million (2020 census)</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-history"></i> Name Origin</h3>
-    <p>Guangyuan (广元) is a vibrant city in China with rich cultural heritage and modern development.</p>
+    <p>Guangyuan means "vast origin" in Chinese. It is located in northern Sichuan at the edge of the Sichuan Basin and was historically the northern gateway to Sichuan.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-smile"></i> Happiness Index</h3>
@@ -120,36 +129,36 @@
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-subway"></i> Metro & Transport</h3>
-    <p>Transport details available</p>
+    <p>Guangyuan Panlong Airport (GYS) offers domestic flights. Guangyuan Railway Station and Guangyuan South Station are major hubs on the Baoji–Chengdu and Lanzhou–Chongqing railways. Buses and taxis serve the city.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-graduation-cap"></i> Universities</h3>
-    <p>University info available</p>
+    <p>Sichuan University of Information Technology and Guangyuan Vocational and Technical College are the main local institutions.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-leaf"></i> Natural Resources</h3>
-    <p>Beautiful natural landscapes including rivers, mountains, and green spaces.</p>
+    <p>Guangyuan lies where the Sichuan Basin meets the Qinling Mountains. It has a humid subtropical climate, the Jialing River, and forests including the Tangjiahe Nature Reserve.</p>
   </div>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-camera"></i> Attractions in Guangyuan</h2>
-  <p>Historical sites, modern landmarks, cultural venues, and natural parks.</p>
+  <p>Visit Jianmen Pass (Jianmenguan), Huangze Temple, Thousand-Buddha Cliff, Zhaohua Ancient Town, and the Qinling–Daba mountain scenic areas.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-route"></i> Popular Routes</h2>
-  <p>Day 1: City center exploration; Day 2: Natural attractions and cultural sites; Day 3: Local markets and modern landmarks.</p>
+  <p><strong>Day 1:</strong> Visit Jianmen Pass and Huangze Temple.<br><strong>Day 2:</strong> Explore Zhaohua Ancient Town and Thousand-Buddha Cliff.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-utensils"></i> Food & Dining</h2>
-  <p>Diverse culinary scene with local specialties, street food, and regional cuisine.</p>
+  <p>Try Guangyuan cold noodles, Jianmen tofu, Sichuan hot pot, and spicy chicken. The city blends northern Sichuan and Shaanxi flavors.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-shopping-bag"></i> Shopping</h2>
-  <p>Pedestrian streets, modern malls, local markets, and specialty stores.</p>
+  <p>Jianmen tofu products, Sichuan pepper, Thousand-Buddha Cliff replicas, and local snacks are popular. Main shopping is in Lizhou District.</p>
 </div>
 
 <div class="city-cta" style="margin-top:3rem;">
@@ -257,5 +266,6 @@ function handleWhatsAppModalOutsideClick(e) {
     }
 }
 </script>
+<script src="security.js" defer></script>
 </body>
 </html>

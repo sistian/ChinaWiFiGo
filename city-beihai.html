@@ -22,7 +22,16 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo.jpg">
 <link rel="manifest" href="manifest.json">
+    <!-- ===== Security Headers (Static HTML Fallback) ===== -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -108,11 +117,11 @@
 <div class="city-info-grid">
   <div class="city-info-card">
     <h3><i class="fas fa-ruler-combined"></i> Area & Population</h3>
-    <p><strong>Area:</strong> Area data available<br><strong>Population:</strong> Population data available</p>
+    <p><strong>Area:</strong> 3,337 km² (prefecture-level city)<br><strong>Population:</strong> Approximately 1.7 million (2020 census)</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-history"></i> Name Origin</h3>
-    <p>Beihai (北海) is a vibrant city in China with rich cultural heritage and modern development.</p>
+    <p>Beihai means "north sea" in Chinese, named for its location on the northern shore of the Beibu Gulf. It was historically an important port and treaty port in Guangxi.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-smile"></i> Happiness Index</h3>
@@ -120,36 +129,36 @@
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-subway"></i> Metro & Transport</h3>
-    <p>Transport details available</p>
+    <p>Beihai Fucheng Airport (BHY) offers flights to major Chinese cities. Beihai Railway Station connects to Nanning and other cities on the Nanning–Beihai high-speed line. City buses and taxis serve the city.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-graduation-cap"></i> Universities</h3>
-    <p>University info available</p>
+    <p>Beihai University of Art and Design and Beihai Vocational and Technical College are the main local higher-education institutions.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-leaf"></i> Natural Resources</h3>
-    <p>Beautiful natural landscapes including rivers, mountains, and green spaces.</p>
+    <p>Beihai has a tropical monsoon climate, beautiful beaches, mangroves, and coral reefs. Silver Beach (Yintan) is famous for its long, flat, white-sand beach.</p>
   </div>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-camera"></i> Attractions in Beihai</h2>
-  <p>Historical sites, modern landmarks, cultural venues, and natural parks.</p>
+  <p>Must-see spots include Silver Beach, Beihai Old Street (with colonial-era architecture), Weizhou Island (volcanic island), and the Mangrove Nature Reserve.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-route"></i> Popular Routes</h2>
-  <p>Day 1: City center exploration; Day 2: Natural attractions and cultural sites; Day 3: Local markets and modern landmarks.</p>
+  <p><strong>Day 1:</strong> Walk Beihai Old Street and relax on Silver Beach.<br><strong>Day 2:</strong> Take a ferry to Weizhou Island to see volcanic landscapes and seafood markets.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-utensils"></i> Food & Dining</h2>
-  <p>Diverse culinary scene with local specialties, street food, and regional cuisine.</p>
+  <p>Beihai is famous for fresh seafood, especially crab, shrimp, and fish. Try Hainanese-style chicken rice, seafood noodles, and tropical fruit from the south.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-shopping-bag"></i> Shopping</h2>
-  <p>Pedestrian streets, modern malls, local markets, and specialty stores.</p>
+  <p>Pearl jewelry from Beihai, dried seafood, tropical fruits, and Vietnamese-style goods are popular. Main shopping areas are around Beibuwan Square and the old port.</p>
 </div>
 
 <div class="city-cta" style="margin-top:3rem;">
@@ -257,5 +266,6 @@ function handleWhatsAppModalOutsideClick(e) {
     }
 }
 </script>
+<script src="security.js" defer></script>
 </body>
 </html>

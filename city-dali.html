@@ -22,7 +22,16 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo.jpg">
 <link rel="manifest" href="manifest.json">
+    <!-- ===== Security Headers (Static HTML Fallback) ===== -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -44,6 +53,11 @@
 .city-cta a{display:inline-block;margin-top:1rem;padding:1rem 2rem;background:#fff;color:var(--primary);border-radius:9999px;font-weight:700;text-decoration:none}
 .breadcrumb{display:flex;gap:0.5rem;align-items:center;margin-bottom:2rem;color:var(--text-muted);font-size:0.9rem}
 .breadcrumb a{color:var(--primary);text-decoration:none}
+.city-hero-img{margin:2rem 0;border-radius:1rem;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.1);height:320px;position:relative;background:var(--bg-tertiary)}
+.city-hero-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.city-hero-img:hover img{transform:scale(1.03)}
+.city-hero-caption{position:absolute;bottom:0;left:0;right:0;padding:1rem 1.5rem;background:linear-gradient(transparent, rgba(0,0,0,0.65));color:#fff;font-size:0.9rem;font-weight:500}
+@media (max-width:768px){.city-hero-img{height:220px}}
 </style>
 </head>
 <body>
@@ -79,6 +93,13 @@
   <p class="section-subtitle" style="color:var(--text-muted);">Explore Dali with unlimited 5G pocket WiFi from ChinaWiFiGo</p>
 </div>
 
+
+<div class="city-hero-img">
+  <img src="images/cities/dali.jpg" alt="Dali 大理 city scenery - Ancient city on Erhai Lake. Bai minority culture, Three Pago" loading="lazy">
+  <div class="city-hero-caption">Dali (大理) — Ancient city on Erhai Lake. Bai minority culture, Three Pagodas, and the legenda...</div>
+</div>
+
+
 <div class="city-cta">
   <h2><i class="fas fa-wifi"></i> Stay Connected in Dali</h2>
   <p>Hotel delivery · No Chinese ID required · Full Google access</p>
@@ -108,11 +129,11 @@
 <div class="city-info-grid">
   <div class="city-info-card">
     <h3><i class="fas fa-ruler-combined"></i> Area & Population</h3>
-    <p><strong>Area:</strong> Area data available<br><strong>Population:</strong> Population data available</p>
+    <p><strong>Area:</strong> 1,468 km²<br><strong>Population:</strong> Approx. 650,000</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-history"></i> Name Origin</h3>
-    <p>Dali (大理) is a vibrant city in China with rich cultural heritage and modern development.</p>
+    <p>Dali was the capital of the Dali Kingdom (937–1253) and takes its name from the Bai word for "blessing" or the Chinese "great propriety." It is a famous Bai ethnic cultural center in Yunnan.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-smile"></i> Happiness Index</h3>
@@ -120,36 +141,36 @@
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-subway"></i> Metro & Transport</h3>
-    <p>Transport details available</p>
+    <p>Dali Airport + Dali Railway Station; high-speed rail to Kunming & Lijiang.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-graduation-cap"></i> Universities</h3>
-    <p>University info available</p>
+    <p>Dali University</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-leaf"></i> Natural Resources</h3>
-    <p>Beautiful natural landscapes including rivers, mountains, and green spaces.</p>
+    <p>Dali lies between the Cangshan Mountains and Erhai Lake on the Yunnan-Guizhou Plateau. It has a mild highland climate and is famous for its natural beauty and biodiversity.</p>
   </div>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-camera"></i> Attractions in Dali</h2>
-  <p>Historical sites, modern landmarks, cultural venues, and natural parks.</p>
+  <p>Visit Dali Old Town, Erhai Lake, Cangshan Mountain, the Three Pagodas of Chongsheng Temple, Xizhou and Shuanglang villages, and the ancient city walls.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-route"></i> Popular Routes</h2>
-  <p>Day 1: City center exploration; Day 2: Natural attractions and cultural sites; Day 3: Local markets and modern landmarks.</p>
+  <p><strong>Day 1:</strong> Explore Dali Old Town and the Three Pagodas.<br><strong>Day 2:</strong> Bike around Erhai Lake and visit Shuanglang or Xizhou villages.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-utensils"></i> Food & Dining</h2>
-  <p>Diverse culinary scene with local specialties, street food, and regional cuisine.</p>
+  <p>Try Dali-style rice noodle soup, crossing-the-bridge noodles, Bai ethnic dishes such as rose candy, yogurt, and cheese, and Yunnan-style grilled tofu.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-shopping-bag"></i> Shopping</h2>
-  <p>Pedestrian streets, modern malls, local markets, and specialty stores.</p>
+  <p>Buy Bai tie-dye textiles, silver jewelry, marble products, Yunnan coffee, Pu'er tea, and rose products. Dali Old Town has many craft shops.</p>
 </div>
 
 <div class="city-cta" style="margin-top:3rem;">
@@ -257,5 +278,6 @@ function handleWhatsAppModalOutsideClick(e) {
     }
 }
 </script>
+<script src="security.js" defer></script>
 </body>
 </html>

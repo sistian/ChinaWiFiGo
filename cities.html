@@ -50,8 +50,7 @@
         <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)">
         <meta name="theme-color" content="#1e1b4b" media="(prefers-color-scheme: dark)">
     <!-- ===== Security Headers (Static HTML Fallback) ===== -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
-    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -107,6 +106,7 @@
             display: none;
         }
     </style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"ChinaWiFiGo","alternateName":"Wuhan City Zhierchong Culture and Tourism Co., Ltd.","image":"https://www.ChinaWiFiGo.com/logo.jpg","url":"https://www.ChinaWiFiGo.com","telephone":"+86-155-2777-1775","email":"sistian@foxmail.com","priceRange":"$","currenciesAccepted":"USD, CNY, EUR","paymentAccepted":"PayPal, Alipay","address":{"@type":"PostalAddress","streetAddress":"Unit 2622, Office Tower, Henglong Plaza, No. 688 Jinghan Avenue, Qiaokou District","addressLocality":"Wuhan","addressRegion":"Hubei","postalCode":"430000","addressCountry":"CN"},"geo":{"@type":"GeoCoordinates","latitude":"30.5928","longitude":"114.3055"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"09:00","closes":"21:00"}],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.8","reviewCount":"1250"}}</script>
 </head>
 <body>
 
@@ -318,7 +318,7 @@ const cities = {
 {name:'Korla', cn:'库尔勒'}, {name:'Karamay', cn:'克拉玛依'}, {name:'Kelamayi', cn:'克拉玛依'}
 ],
 'L': [
-{name:'Lhasa', cn:'拉萨'}, {name:'Lanzhou', cn:'兰州'}, {name:'Luoyang', cn:'洛阳'},
+{name:'Lhasa', cn:'拉萨'}, {name:'Lijiang', cn:'丽江'}, {name:'Lanzhou', cn:'兰州'}, {name:'Luoyang', cn:'洛阳'},
 {name:'Liuzhou', cn:'柳州'}, {name:'Linyi', cn:'临沂'}, {name:'Lianyungang', cn:'连云港'},
 {name:'Leshan', cn:'乐山'}, {name:'Lishui', cn:'丽水'}, {name:'Liupanshui', cn:'六盘水'},
 {name:'Linzhi', cn:'林芝'}, {name:'Lincang', cn:'临沧'}, {name:'Longnan', cn:'陇南'},
@@ -365,6 +365,9 @@ const cities = {
 {name:'Tongchuan', cn:'铜川'}, {name:'Tongliao', cn:'通辽'}, {name:'Tonghua', cn:'通化'},
 {name:'Tongling', cn:'铜陵'}, {name:'Tianshui', cn:'天水'}, {name:'Tacheng', cn:'塔城'},
 {name:'Tumxuk', cn:'图木舒克'}, {name:'Tumuke', cn:'图木舒克'}
+],
+'U': [
+{name:'Urumqi', cn:'乌鲁木齐'},
 ],
 'W': [
 {name:'Wuhan', cn:'武汉'}, {name:'Wuxi', cn:'无锡'}, {name:'Wenzhou', cn:'温州'},

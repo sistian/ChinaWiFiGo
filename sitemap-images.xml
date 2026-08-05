@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://www.ChinaWiFiGo.com/city-dali.html</loc>
+    <image:image>
+      <image:loc>https://www.ChinaWiFiGo.com/images/cities/dali.jpg</image:loc>
+      <image:caption>Dali city aerial view with Erhai Lake and traditional Bai villages</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.ChinaWiFiGo.com/city-guilin.html</loc>
+    <image:image>
+      <image:loc>https://www.ChinaWiFiGo.com/images/cities/guilin.jpg</image:loc>
+      <image:caption>Guilin karst mountains and Li River at sunrise</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.ChinaWiFiGo.com/city-lhasa.html</loc>
+    <image:image>
+      <image:loc>https://www.ChinaWiFiGo.com/images/cities/lhasa.jpg</image:loc>
+      <image:caption>Potala Palace in Lhasa Tibet</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.ChinaWiFiGo.com/city-lijiang.html</loc>
+    <image:image>
+      <image:loc>https://www.ChinaWiFiGo.com/images/cities/lijiang.jpg</image:loc>
+      <image:caption>Lijiang old town panoramic view with Jade Dragon Snow Mountain</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.ChinaWiFiGo.com/city-shiyan.html</loc>
+    <image:image>
+      <image:loc>https://www.ChinaWiFiGo.com/images/cities/shiyan.jpg</image:loc>
+      <image:caption>Wudang Mountain Prince Slope red walls and green tiles in Shiyan</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.ChinaWiFiGo.com/city-urumqi.html</loc>
+    <image:image>
+      <image:loc>https://www.ChinaWiFiGo.com/images/cities/urumqi.jpg</image:loc>
+      <image:caption>Uyghur nang bread vendor at Urumqi bazaar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.ChinaWiFiGo.com/city-xishuangbanna.html</loc>
+    <image:image>
+      <image:loc>https://www.ChinaWiFiGo.com/images/cities/xishuangbanna.jpg</image:loc>
+      <image:caption>Dai style Buddhist temple in Xishuangbanna</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.ChinaWiFiGo.com/city-zhangjiajie.html</loc>
+    <image:image>
+      <image:loc>https://www.ChinaWiFiGo.com/images/cities/zhangjiajie.jpg</image:loc>
+      <image:caption>Zhangjiajie Avatar Mountains quartz sandstone pillars</image:caption>
+    </image:image>
+  </url>
+</urlset>

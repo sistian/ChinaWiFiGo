@@ -22,7 +22,16 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo.jpg">
 <link rel="manifest" href="manifest.json">
+    <!-- ===== Security Headers (Static HTML Fallback) ===== -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -44,6 +53,11 @@
 .city-cta a{display:inline-block;margin-top:1rem;padding:1rem 2rem;background:#fff;color:var(--primary);border-radius:9999px;font-weight:700;text-decoration:none}
 .breadcrumb{display:flex;gap:0.5rem;align-items:center;margin-bottom:2rem;color:var(--text-muted);font-size:0.9rem}
 .breadcrumb a{color:var(--primary);text-decoration:none}
+.city-hero-img{margin:0;border-radius:0;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.1);height:380px;position:relative;background:var(--bg-tertiary)}
+.city-hero-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.city-hero-img:hover img{transform:scale(1.03)}
+.city-hero-caption{position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent, rgba(0,0,0,0.65));color:#fff;font-size:0.95rem;font-weight:600}
+@media (max-width:768px){.city-hero-img{height:240px}}
 </style>
 </head>
 <body>
@@ -79,6 +93,11 @@
   <p class="section-subtitle" style="color:var(--text-muted);">Explore Fuzhou with unlimited 5G pocket WiFi from ChinaWiFiGo</p>
 </div>
 
+
+<div class="city-hero-img">
+  <img src="images/cities/fuzhou.jpg" alt="Fuzhou Three Lanes and Seven Alleys" loading="eager">
+  <div class="city-hero-caption">Fuzhou (福州)</div>
+</div>
 <div class="city-cta">
   <h2><i class="fas fa-wifi"></i> Stay Connected in Fuzhou</h2>
   <p>Hotel delivery · No Chinese ID required · Full Google access</p>
@@ -108,11 +127,11 @@
 <div class="city-info-grid">
   <div class="city-info-card">
     <h3><i class="fas fa-ruler-combined"></i> Area & Population</h3>
-    <p><strong>Area:</strong> Area data available<br><strong>Population:</strong> Population data available</p>
+    <p><strong>Area:</strong> 12,154 km² (prefecture-level city)<br><strong>Population:</strong> Approximately 8.3 million (2020 census)</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-history"></i> Name Origin</h3>
-    <p>Fuzhou (福州) is a vibrant city in China with rich cultural heritage and modern development.</p>
+    <p>Fuzhou means "blessed prefecture" in Chinese. It is the capital of Fujian Province and was an important port on the Maritime Silk Road, historically known as the City of Banyan Trees.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-smile"></i> Happiness Index</h3>
@@ -120,36 +139,36 @@
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-subway"></i> Metro & Transport</h3>
-    <p>Transport details available</p>
+    <p>Fuzhou Changle International Airport (FOC) serves domestic and international flights. Fuzhou Railway Station and Fuzhou South Station are major rail hubs on the Wenzhou–Fuzhou and Fuzhou–Xiamen high-speed railways. The city has Metro Lines 1, 2, 5, and 6.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-graduation-cap"></i> Universities</h3>
-    <p>University info available</p>
+    <p>Fuzhou University, Fujian Normal University, Fujian Medical University, and Fujian Agriculture and Forestry University are major institutions.</p>
   </div>
   <div class="city-info-card">
     <h3><i class="fas fa-leaf"></i> Natural Resources</h3>
-    <p>Beautiful natural landscapes including rivers, mountains, and green spaces.</p>
+    <p>Fuzhou lies on the coast of the Taiwan Strait with a humid subtropical climate. It has mountains, the Min River, hot springs, and many banyan trees.</p>
   </div>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-camera"></i> Attractions in Fuzhou</h2>
-  <p>Historical sites, modern landmarks, cultural venues, and natural parks.</p>
+  <p>Visit the Three Lanes and Seven Alleys (Sanfang Qixiang), Drum Mountain (Gushan), West Lake Park, Fuzhou National Forest Park, and Mawei Shipyard.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-route"></i> Popular Routes</h2>
-  <p>Day 1: City center exploration; Day 2: Natural attractions and cultural sites; Day 3: Local markets and modern landmarks.</p>
+  <p><strong>Day 1:</strong> Walk the Three Lanes and Seven Alleys and visit West Lake Park.<br><strong>Day 2:</strong> Climb Drum Mountain and visit Mawei Shipyard.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-utensils"></i> Food & Dining</h2>
-  <p>Diverse culinary scene with local specialties, street food, and regional cuisine.</p>
+  <p>Fuzhou is famous for Fujian cuisine: fish balls, meat dumplings in soup (rouyan), oyster omelette, Buddha jumps over the wall, and lychee pork.</p>
 </div>
 
 <div class="city-section">
   <h2><i class="fas fa-shopping-bag"></i> Shopping</h2>
-  <p>Pedestrian streets, modern malls, local markets, and specialty stores.</p>
+  <p>Buy Shoushan stone carvings, bodiless lacquerware, Fuzhou fish balls, jasmine tea, and Fujian tea. Main shopping areas include Dongjiekou and Cangshan Wanda.</p>
 </div>
 
 <div class="city-cta" style="margin-top:3rem;">
@@ -257,5 +276,6 @@ function handleWhatsAppModalOutsideClick(e) {
     }
 }
 </script>
+<script src="security.js" defer></script>
 </body>
 </html>
