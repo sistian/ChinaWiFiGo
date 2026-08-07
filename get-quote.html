@@ -50,7 +50,9 @@
         <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)">
         <meta name="theme-color" content="#1e1b4b" media="(prefers-color-scheme: dark)">
     <!-- ===== Security Headers (Static HTML Fallback) ===== -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://chinawifigo-backend-api.vercel.app; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+<!-- Backend API config: replace with your actual Vercel URL after deployment -->
+<script>window.CWG_API_URL = 'https://chinawifigo-backend-api.vercel.app';</script>
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -418,38 +420,51 @@
 <script>
 async function handleQuoteSubmit(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]');
+    const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    const API_URL = window.CWG_API_URL || 'YOUR_VERCEL_API_URL';
+
+    if (API_URL === 'YOUR_VERCEL_API_URL' || API_URL.indexOf('https://') !== 0) {
+        alert('Backend not configured yet. Please set window.CWG_API_URL to your Vercel URL.');
+        return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-    const formData = new FormData(e.target);
+    const formData = new FormData(form);
+    const services = formData.getAll('services').join(', ');
+    const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('whatsapp'),
+        destination: formData.get('destinations'),
+        travelDates: `${formData.get('trip_start')} → ${formData.get('trip_end')}`,
+        numDevices: formData.get('travelers'),
+        deliveryMethod: services || 'WiFi Only',
+        message: formData.get('notes') || ''
+    };
 
-    // Send email notification
-    let emailSent = false;
     try {
-        const response = await fetch('https://formsubmit.co/ajax/sistian@foxmail.com', {
+        const response = await fetch(API_URL.replace(/\/?$/, '') + '/api/quote', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(data)
         });
-        if (response.ok) {
-            console.log('Quote email sent successfully');
-            emailSent = true;
-        } else {
-            console.log('Quote email service response:', response.status);
-        }
-    } catch (err) {
-        console.log('Quote email notification error:', err);
-    }
+        const json = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(json.error || ('HTTP ' + response.status));
 
-    // Show success
-    document.getElementById('quoteForm').style.display = 'none';
-    document.getElementById('quoteSuccess').style.display = 'block';
-    
-    // Show email status
-    if (emailSent) {
-        document.getElementById('quoteSuccess').innerHTML += '<div style="margin-top:15px;padding:10px 15px;background:#dcfce7;color:#166534;border-radius:8px;font-size:0.9rem;"><i class="fas fa-check-circle"></i> <strong>Email sent!</strong> We have received your quote request. If this is your first inquiry, please check your email (sistian@foxmail.com) for a verification link from FormSubmit.</div>';
-    } else {
-        document.getElementById('quoteSuccess').innerHTML += '<div style="margin-top:15px;padding:10px 15px;background:#fef3c7;color:#92400e;border-radius:8px;font-size:0.9rem;"><i class="fas fa-exclamation-triangle"></i> <strong>Email notification may have failed.</strong> Please contact us via WhatsApp to confirm your quote request.</div>';
+        document.getElementById('quoteForm').style.display = 'none';
+        document.getElementById('quoteSuccess').style.display = 'block';
+        document.getElementById('quoteSuccess').innerHTML += '<div style="margin-top:15px;padding:10px 15px;background:#dcfce7;color:#166534;border-radius:8px;font-size:0.9rem;"><i class="fas fa-check-circle"></i> <strong>Quote request sent!</strong> We will send you a customized quote within 24 hours.</div>';
+    } catch (err) {
+        console.error('Quote submission error:', err);
+        document.getElementById('quoteForm').style.display = 'none';
+        document.getElementById('quoteSuccess').style.display = 'block';
+        document.getElementById('quoteSuccess').innerHTML += '<div style="margin-top:15px;padding:10px 15px;background:#fef3c7;color:#92400e;border-radius:8px;font-size:0.9rem;"><i class="fas fa-exclamation-triangle"></i> <strong>Submission failed:</strong> ' + err.message + '. Please contact us via WhatsApp.</div>';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Get My Free Quote';
     }
 }
 

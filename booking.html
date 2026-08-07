@@ -51,7 +51,9 @@
         <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)">
         <meta name="theme-color" content="#1e1b4b" media="(prefers-color-scheme: dark)">
     <!-- ===== Security Headers (Static HTML Fallback) ===== -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://chinawifigo-backend-api.vercel.app; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+<!-- Backend API config: replace with your actual Vercel URL after deployment -->
+<script>window.CWG_API_URL = 'https://chinawifigo-backend-api.vercel.app';</script>
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -760,14 +762,14 @@ async function handlePayment() {
     const config = planConfig[selectedPlanType];
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
-    const fullName = document.getElementById('fullName').value;
-    const whatsapp = document.getElementById('whatsapp').value;
-    const email = document.getElementById('email').value;
+    const fullName = document.getElementById('fullName').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    const email = document.getElementById('email').value.trim();
     const deviceCount = parseInt(document.getElementById('deviceCount').value) || 1;
     const deliveryMethod = document.getElementById('deliveryMethod').value;
-    const city = document.getElementById('city').value;
-    const hotel = document.getElementById('hotel').value;
-    const requests = document.getElementById('requests').value;
+    const city = document.getElementById('city').value.trim();
+    const hotel = document.getElementById('hotel').value.trim();
+    const requests = document.getElementById('requests').value.trim();
 
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -777,70 +779,54 @@ async function handlePayment() {
     const total = subtotal + deposit;
     const orderId = generateOrderId();
 
-    // Send email via FormSubmit using fetch (works without web server)
-    const formData = new FormData();
-    formData.append('_subject', 'New Order: ' + orderId + ' - Payment Received!');
-    formData.append('_template', 'table');
-    formData.append('_captcha', 'false');
-    formData.append('Order ID', orderId);
-    formData.append('Plan', config.name);
-    formData.append('Start Date', startDate);
-    formData.append('End Date', endDate);
-    formData.append('Duration', days + ' days');
-    formData.append('Daily Rate', '$' + config.price.toFixed(2));
-    formData.append('Number of Devices', deviceCount);
-    formData.append('Subtotal', '$' + subtotal.toFixed(2));
-    formData.append('Deposit', '$' + deposit.toFixed(2) + ' (refundable)');
-    formData.append('Total Amount', '$' + total.toFixed(2));
-    formData.append('Payment Method', selectedPaymentMethod === 'paypal' ? 'PayPal' : 'Alipay');
-    formData.append('Full Name', fullName);
-    formData.append('WhatsApp', whatsapp);
-    formData.append('Email', email);
-    formData.append('Delivery Method', deliveryMethod);
-    formData.append('City', city);
-    formData.append('Hotel/Address', hotel);
-    formData.append('Special Requests', requests || 'None');
-    formData.append('Status', 'PAYMENT REPORTED');
+    const API_URL = window.CWG_API_URL || 'YOUR_VERCEL_API_URL';
+    const payload = {
+        orderId,
+        firstName: fullName,
+        lastName: '',
+        email,
+        phone: whatsapp,
+        country: '',
+        city,
+        planType: config.name,
+        numDevices: String(deviceCount),
+        startDate,
+        endDate,
+        deliveryAddress: hotel,
+        currency: 'USD',
+        totalPrice: total.toFixed(2),
+        paymentMethod: selectedPaymentMethod === 'paypal' ? 'PayPal' : 'Alipay',
+        paymentStatus: 'pending',
+        notes: [deliveryMethod, requests].filter(Boolean).join('\n')
+    };
 
-    // Send email notification to customer service
     let emailSent = false;
     let emailError = '';
     try {
-        const response = await fetch('https://formsubmit.co/ajax/2c9a20170354ac8db2dbc05257f511d6', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json'
-            },
-            body: formData
-        });
-        if (response.ok) {
-            // Try to parse JSON, fallback silently if it fails
-            try {
-                const result = await response.json();
-                console.log('Email sent successfully:', result);
-            } catch (parseErr) {
-                console.log('Email sent (non-JSON response)');
-            }
-            emailSent = true;
-        } else {
-            emailError = 'Email service returned status ' + response.status;
-            console.log('Email service response:', response.status);
+        if (API_URL === 'YOUR_VERCEL_API_URL' || API_URL.indexOf('https://') !== 0) {
+            throw new Error('Backend not configured yet. Please set window.CWG_API_URL to your Vercel URL.');
         }
+        const response = await fetch(API_URL.replace(/\/?$/, '') + '/api/booking', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || ('HTTP ' + response.status));
+        emailSent = true;
+        console.log('Booking submitted:', result);
     } catch (e) {
-        emailError = 'Network error: ' + e.message;
-        console.log('Email notification error:', e);
+        emailError = e.message;
+        console.error('Booking submission error:', e);
     }
 
-    // Show pending page even if email fails (network issues)
     document.getElementById('displayOrderId').textContent = 'Order #' + orderId;
     document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
     document.getElementById('pending').classList.add('active');
     document.querySelectorAll('.step-dot').forEach(d => d.classList.add('completed'));
 
-    // Show email status notification
     showEmailStatus(emailSent, emailError);
 
-    // Save order to localStorage as backup
     const orderData = { orderId, fullName, email, total: total.toFixed(2), timestamp: new Date().toISOString() };
     let orders = JSON.parse(localStorage.getItem('chinaWiFiGoOrders') || '[]');
     orders.push(orderData);
@@ -851,9 +837,9 @@ function showEmailStatus(sent, error) {
     const statusDiv = document.getElementById('emailStatus');
     if (!statusDiv) return;
     if (sent) {
-        statusDiv.innerHTML = '<div style="background:#dcfce7;color:#166534;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:0.9rem;"><i class="fas fa-check-circle"></i> <strong>Email sent!</strong> We have notified our team. If this is your first order, please check your email (sistian@foxmail.com) for a verification link from FormSubmit.</div>';
+        statusDiv.innerHTML = '<div style="background:#dcfce7;color:#166534;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:0.9rem;"><i class="fas fa-check-circle"></i> <strong>Booking received!</strong> We have notified our team and sent a confirmation email to you. We will verify your payment and contact you via WhatsApp shortly.</div>';
     } else {
-        statusDiv.innerHTML = '<div style="background:#fef3c7;color:#92400e;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:0.9rem;"><i class="fas fa-exclamation-triangle"></i> <strong>Email notification failed.</strong> ' + error + '<br>Please contact us via WhatsApp to confirm your order.</div>';
+        statusDiv.innerHTML = '<div style="background:#fef3c7;color:#92400e;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:0.9rem;"><i class="fas fa-exclamation-triangle"></i> <strong>Booking notification failed.</strong> ' + error + '<br>Please contact us via WhatsApp to confirm your order.</div>';
     }
 }
 
@@ -880,17 +866,43 @@ function resendEmailNotification() {
         btn.disabled = true;
     }
     
-    fetch('https://formsubmit.co/ajax/2c9a20170354ac8db2dbc05257f511d6', {
+    const API_URL = window.CWG_API_URL || 'YOUR_VERCEL_API_URL';
+    if (API_URL === 'YOUR_VERCEL_API_URL' || API_URL.indexOf('https://') !== 0) {
+        alert('Backend not configured yet. Please set window.CWG_API_URL to your Vercel URL.');
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-redo"></i> Resend Email';
+            btn.disabled = false;
+        }
+        return;
+    }
+    fetch(API_URL.replace(/\/?$/, '') + '/api/booking', {
         method: 'POST',
-        headers: {
-            'Accept': 'application/json'
-        },
-        body: formData
-    }).then(response => {
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+            orderId: latest.orderId,
+            firstName: latest.fullName || 'N/A',
+            lastName: '',
+            email: latest.email || 'N/A',
+            phone: '',
+            country: '',
+            city: '',
+            planType: 'Resend',
+            numDevices: '1',
+            startDate: '',
+            endDate: '',
+            deliveryAddress: '',
+            currency: 'USD',
+            totalPrice: latest.total || '0',
+            paymentMethod: 'Resend',
+            paymentStatus: 'pending',
+            notes: 'Resend from booking page'
+        })
+    }).then(async response => {
+        const result = await response.json().catch(() => ({}));
         if (response.ok) {
             alert('Email resent successfully! Please check sistian@foxmail.com.');
         } else {
-            alert('Email failed to send. Status: ' + response.status + '\nPlease contact us via WhatsApp.');
+            alert('Email failed to send. Status: ' + response.status + ' - ' + (result.error || 'Unknown') + '\nPlease contact us via WhatsApp.');
         }
     }).catch(e => {
         alert('Email failed to send. Error: ' + e.message + '\nPlease contact us via WhatsApp.');

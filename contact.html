@@ -51,7 +51,9 @@
         <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)">
         <meta name="theme-color" content="#1e1b4b" media="(prefers-color-scheme: dark)">
     <!-- ===== Security Headers (Static HTML Fallback) ===== -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://formsubmit.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://api.exchangerate-api.com https://chinawifigo-backend-api.vercel.app; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+<!-- Backend API config: replace with your actual Vercel URL after deployment -->
+<script>window.CWG_API_URL = 'https://chinawifigo-backend-api.vercel.app';</script>
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -71,6 +73,22 @@
 .contact-header { text-align: center; margin-bottom: var(--space-2xl); }
 .contact-content { background: var(--bg-primary); border-radius: var(--radius-xl); padding: var(--space-2xl); box-shadow: var(--shadow-lg); border: 1px solid var(--bg-tertiary); }
 .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); margin-bottom: var(--space-xl); }
+.cwg-form { margin-top: var(--space-xl); }
+.cwg-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-md); }
+.cwg-form-group { margin-bottom: var(--space-md); }
+.cwg-form-group label { display: block; margin-bottom: var(--space-xs); font-weight: 600; color: var(--text-primary); }
+.cwg-form-group input,
+.cwg-form-group textarea,
+.cwg-form-group select { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bg-tertiary); border-radius: var(--radius-lg); background: var(--bg-primary); color: var(--text-primary); font-family: inherit; font-size: 0.95rem; }
+.cwg-form-group textarea { resize: vertical; min-height: 120px; }
+.cwg-form-group input:focus,
+.cwg-form-group textarea:focus,
+.cwg-form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+.cwg-submit { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.75rem; background: var(--primary); color: #fff; border: none; border-radius: 9999px; font-weight: 700; cursor: pointer; transition: opacity 0.2s ease; }
+.cwg-submit:hover { opacity: 0.9; }
+.cwg-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.cwg-form-status { margin-top: var(--space-md); font-size: 0.9rem; }
+@media (max-width: 640px) { .cwg-form-row { grid-template-columns: 1fr; } .contact-grid { grid-template-columns: 1fr; } }
 .contact-card { padding: var(--space-lg); background: var(--bg-secondary); border-radius: var(--radius-lg); text-align: center; }
 .contact-card i { font-size: 2rem; color: var(--primary); margin-bottom: var(--space-sm); display: block; }
 .contact-card h3 { margin-bottom: 0.5rem; }
@@ -144,6 +162,46 @@
 <p>Scan QR code on our website</p>
 </div>
 </div>
+
+<form id="cwgContactForm" class="cwg-form">
+  <h3 style="margin-bottom:var(--space-md);color:var(--primary)">Send us a message</h3>
+  <div class="cwg-form-row">
+    <div class="cwg-form-group">
+      <label for="cwgName">Name *</label>
+      <input type="text" id="cwgName" name="name" required placeholder="Your name">
+    </div>
+    <div class="cwg-form-group">
+      <label for="cwgEmail">Email *</label>
+      <input type="email" id="cwgEmail" name="email" required placeholder="you@example.com">
+    </div>
+  </div>
+  <div class="cwg-form-row">
+    <div class="cwg-form-group">
+      <label for="cwgPhone">Phone</label>
+      <input type="tel" id="cwgPhone" name="phone" placeholder="+86 155 2777 1775">
+    </div>
+    <div class="cwg-form-group">
+      <label for="cwgSubject">Subject *</label>
+      <select id="cwgSubject" name="subject" required>
+        <option value="General Inquiry">General Inquiry</option>
+        <option value="Booking Question">Booking Question</option>
+        <option value="WiFi Rental Support">WiFi Rental Support</option>
+        <option value="Partnership">Partnership</option>
+      </select>
+    </div>
+  </div>
+  <div class="cwg-form-group">
+    <label for="cwgMessage">Message *</label>
+    <textarea id="cwgMessage" name="message" required placeholder="How can we help you?"></textarea>
+  </div>
+  <!-- Honeypot: hidden from real users -->
+  <div style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden" aria-hidden="true">
+    <input type="text" name="website_url" tabindex="-1" autocomplete="off" placeholder="Leave this blank">
+  </div>
+  <button type="submit" class="cwg-submit" id="cwgContactSubmit">Send Message</button>
+  <div id="cwgContactStatus" class="cwg-form-status"></div>
+</form>
+
 <div style="text-align:center;padding:var(--space-lg);background:var(--bg-secondary);border-radius:var(--radius-lg);">
 <h3 style="margin-bottom:var(--space-sm);">Business Hours</h3>
 <p style="color:var(--text-secondary);"><strong>9:00 AM - 9:00 PM China Time (UTC+8)</strong></p>
@@ -255,6 +313,56 @@ License No.: L-HUB-101603
 </div>
 
     <script src="security.js" defer></script>
+
+<script>
+(function(){
+  var form = document.getElementById('cwgContactForm');
+  if (!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var btn = document.getElementById('cwgContactSubmit');
+    var status = document.getElementById('cwgContactStatus');
+    var API_URL = window.CWG_API_URL || 'YOUR_VERCEL_API_URL';
+
+    if (API_URL === 'YOUR_VERCEL_API_URL' || API_URL.indexOf('https://') !== 0) {
+      status.textContent = 'Backend not configured yet. Please set window.CWG_API_URL to your Vercel URL.';
+      status.style.color = '#ef4444';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    status.textContent = '';
+
+    var data = {};
+    var inputs = form.querySelectorAll('input, select, textarea');
+    for (var i = 0; i < inputs.length; i++) {
+      data[inputs[i].name] = inputs[i].value.trim();
+    }
+
+    fetch(API_URL.replace(/\/?$/, '') + '/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(res){ return res.json().then(function(json){ return { res: res, json: json }; }); })
+    .then(function(result){
+      if (!result.res.ok) throw new Error(result.json.error || ('HTTP ' + result.res.status));
+      status.textContent = 'Message sent! We will reply within 24 hours.';
+      status.style.color = '#16a34a';
+      form.reset();
+    })
+    .catch(function(err){
+      status.textContent = 'Failed to send: ' + err.message;
+      status.style.color = '#ef4444';
+    })
+    .finally(function(){
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    });
+  });
+})();
+</script>
 
 <script>
 (function(){
