@@ -1,6 +1,5 @@
 # ============================================
-# ChinaWiFiGo - Enhanced Robots.txt
-# Purpose: Guide legitimate crawlers, block malicious scanners
+# ChinaWiFiGo robots.txt
 # Domain: www.ChinaWiFiGo.com
 # ============================================
 
@@ -9,34 +8,10 @@
 # ============================================
 User-agent: *
 
-# Allow main content
+# Allow all main content
 Allow: /
-Allow: /about.html
-Allow: /booking.html
-Allow: /cities.html
-Allow: /contact.html
-Allow: /device-guide.html
-Allow: /faq.html
-Allow: /get-quote.html
-Allow: /help-center.html
-Allow: /index.html
-Allow: /index-zh.html
-Allow: /index-zh-tw.html
-Allow: /privacy.html
-Allow: /refund.html
-Allow: /terms.html
-Allow: /cookies.html
 
-# Allow static assets
-Allow: /images/
-Allow: /css/
-Allow: /js/
-Allow: /*.jpg$
-Allow: /*.png$
-Allow: /*.svg$
-Allow: /*.ico$
-
-# Block sensitive directories and files (Anti-scanning)
+# Block sensitive paths
 Disallow: /api/
 Disallow: /admin/
 Disallow: /wp-admin/
@@ -66,15 +41,9 @@ Disallow: /*.backup$
 Disallow: /*.zip$
 Disallow: /*.tar$
 Disallow: /*.gz$
-Disallow: /*.sql$
 Disallow: /*.git$
 Disallow: /.htaccess$
 Disallow: /.htpasswd$
-
-# Block URL parameters (prevent duplicate content & parameter attacks)
-Disallow: /*?*
-Disallow: /*&*
-Disallow: /*=*
 
 # Block common attack paths
 Disallow: /xmlrpc.php
@@ -86,13 +55,12 @@ Disallow: /install.php
 Disallow: /setup.php
 
 # ============================================
-# 2. GOOGLE-SPECIFIC RULES
+# 2. SEARCH ENGINE BOTS
 # ============================================
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 1
 
-# Googlebot-Image
 User-agent: Googlebot-Image
 Allow: /images/
 Allow: /*.jpg$
@@ -100,51 +68,54 @@ Allow: /*.png$
 Allow: /*.svg$
 Allow: /*.webp$
 
-# Googlebot-Video
 User-agent: Googlebot-Video
 Disallow: /
 
-# ============================================
-# 3. BING-SPECIFIC RULES
-# ============================================
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
 
-# BingPreview
 User-agent: BingPreview
 Disallow: /
 
-# ============================================
-# 4. YAHOO RULES
-# ============================================
 User-agent: Slurp
 Allow: /
 Crawl-delay: 1
 
-# ============================================
-# 5. YANDEX RULES
-# ============================================
 User-agent: Yandex
 Allow: /
 Crawl-delay: 2
 
-# YandexImages
-User-agent: YandexImages
-Allow: /images/
-
-# ============================================
-# 6. BAIDU RULES (Not primary target)
-# ============================================
 User-agent: Baiduspider
 Allow: /
 Crawl-delay: 2
 
-User-agent: Baiduspider-image
-Allow: /images/
+# ============================================
+# 3. AI / LLN CRAWLERS (Critical for AI search)
+# ============================================
+User-agent: GPTBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: AnthropicAI
+Allow: /
+
+User-agent: GoogleExtended
+Allow: /
 
 # ============================================
-# 7. SOCIAL MEDIA CRAWLERS
+# 4. SOCIAL MEDIA
 # ============================================
 User-agent: Twitterbot
 Allow: /
@@ -156,7 +127,7 @@ User-agent: LinkedInBot
 Allow: /
 
 # ============================================
-# 8. BLOCK MALICIOUS/UNWANTED CRAWLERS
+# 5. BLOCK MALICIOUS/SEO SCRAPERS
 # ============================================
 User-agent: MJ12bot
 Disallow: /
@@ -186,12 +157,9 @@ User-agent: proximic
 Disallow: /
 
 # ============================================
-# 9. SITEMAPS
+# SITEMAPS
 # ============================================
 Sitemap: https://www.ChinaWiFiGo.com/sitemap.xml
 Sitemap: https://www.ChinaWiFiGo.com/sitemap-images.xml
 
-# ============================================
-# 10. HOST DECLARATION
-# ============================================
 Host: www.ChinaWiFiGo.com
