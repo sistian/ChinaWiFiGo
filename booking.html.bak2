@@ -373,8 +373,10 @@
 <div class="deposit-notice" style="background:#fff3cd;color:#856404;margin-top:8px;">
 <i class="fas fa-exclamation-circle"></i>
 <p><strong>Reminder:</strong> The WiFi device needs to be plugged into a power bank or wall charger to work. Please bring your own fully charged power bank!</p>
-</div>
-
+<div class="deposit-notice" style="background:#fff3cd;color:#856404;margin-top:8px;">
+<i class="fas fa-exclamation-circle"></i>
+<p><strong>Reminder:</strong> The WiFi device needs to be plugged into a power bank or wall charger to work. Please bring your own fully charged power bank!</p>
+</div></div>
 
 <div class="form-actions">
 <a href="index.html" class="btn-back">Cancel</a>
