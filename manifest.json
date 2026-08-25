@@ -1,0 +1,26 @@
+{
+  "name": "ChinaWiFiGo",
+  "short_name": "ChinaWiFiGo",
+  "description": "Rent unlimited 5G pocket WiFi for China travel. Hotel delivery in 200+ cities.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#6366f1",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
