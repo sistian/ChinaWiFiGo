@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>订单管理后台 | ChinaWiFiGo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1e1b4b">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.chinawifigo.com https://*.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<script>window.CWG_API_URL = 'https://api.chinawifigo.com';
+  try { var _ap = new URLSearchParams(location.search).get('api'); if (_ap) window.CWG_API_URL = _ap; } catch(e) {}</script>
+<style>
+  body { background:#f1f5f9; margin:0; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .adm-top { background:#1e1b4b; color:#fff; padding: 14px 22px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10; }
+  .adm-top h1 { font-size:17px; margin:0; } .adm-top .who { font-size:12px; color:#a5b4fc; }
+  .adm-top button { background:rgba(255,255,255,.12); color:#fff; border:0; padding:8px 16px; border-radius:7px; cursor:pointer; font-size:13px; }
+  .adm-main { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+  .stats { display:grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .stat { background:#fff; border-radius:10px; padding:14px; text-align:center; border:1px solid #e2e8f0; }
+  .stat .n { font-size:24px; font-weight:800; color:#1e1b4b; }
+  .stat .l { font-size:12px; color:#64748b; margin-top:2px; }
+  .stat.hot { border-color:#f59e0b; background:#fffbeb; } .stat.hot .n { color:#b45309; }
+  .filters { display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .filters input, .filters select { padding:10px 12px; border:1.5px solid #e2e8f0; border-radius:8px; font-size:14px; background:#fff; }
+  .filters input[type=text]{ flex:1; min-width:200px; }
+  .filters label.chk { display:flex; align-items:center; gap:6px; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:8px; padding:10px 12px; font-size:13px; color:#b45309; font-weight:700; cursor:pointer; }
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  th { background:#f8fafc; font-size:12px; color:#64748b; text-align:left; padding:11px 12px; border-bottom:1px solid #e2e8f0; white-space:nowrap; }
+  td { padding:11px 12px; border-bottom:1px solid #f1f5f9; font-size:13px; vertical-align:top; }
+  tr:hover td { background:#fafaff; }
+  .ono { font-weight:700; color:#1e1b4b; white-space:nowrap; }
+  .badge { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; white-space:nowrap; }
+  .b-pending{background:#fff7ed;color:#c2410c}.b-confirmed{background:#eff6ff;color:#1d4ed8}.b-active{background:#f0fdf4;color:#15803d}
+  .b-returned{background:#faf5ff;color:#7e22ce}.b-completed{background:#f1f5f9;color:#475569}.b-cancelled{background:#fef2f2;color:#b91c1c}
+  .ops { display:flex; gap:6px; flex-wrap:wrap; }
+  .op { border:0; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; }
+  .op-next { background:#eef2ff; color:#4338ca; } .op-appr { background:#dcfce7; color:#15803d; }
+  .op-rej { background:#fee2e2; color:#b91c1c; } .op-detail { background:#f1f5f9; color:#475569; }
+  .op:hover { filter:brightness(.95); }
+  .pa-box { background:#fefce8; border:1px solid #fde047; border-radius:8px; padding:8px 10px; font-size:12px; color:#854d0e; margin-bottom:6px; }
+  .detail-row { font-size:12px; color:#475569; }
+  .pager { display:flex; gap:8px; justify-content:center; margin-top:16px; align-items:center; font-size:13px; color:#64748b; }
+  .pager button { border:1.5px solid #e2e8f0; background:#fff; padding:7px 14px; border-radius:7px; cursor:pointer; }
+  .empty { text-align:center; padding:40px; color:#94a3b8; background:#fff; border-radius:12px; }
+  .toast { position:fixed; bottom:20px; right:20px; background:#1e1b4b; color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; opacity:0; transition:opacity .3s; z-index:99; }
+  .toast.show { opacity:1; } .toast.err { background:#b91c1c; }
+  @media (max-width: 900px) { .hide-md { display:none; } }
+</style>
+</head>
+<body>
+<div class="adm-top">
+  <div><h1>📶 ChinaWiFiGo 订单管理</h1><div class="who" id="who"></div></div>
+  <button onclick="logout()">退出登录</button>
+</div>
+<div class="adm-main">
+  <div class="stats" id="stats"></div>
+  <div class="filters">
+    <input type="text" id="q" placeholder="🔍 搜索订单号 / 邮箱 / 姓名 / 电话" onkeydown="if(event.key==='Enter')load(1)">
+    <select id="status" onchange="load(1)">
+      <option value="">全部状态</option>
+      <option value="pending">待核实</option><option value="confirmed">已确认</option>
+      <option value="active">使用中</option><option value="returned">已归还</option>
+      <option value="completed">已完成</option><option value="cancelled">已取消</option>
+    </select>
+    <label class="chk"><input type="checkbox" id="pendingOnly" onchange="load(1)"> ⏳ 仅看待审批</label>
+    <button class="op op-next" style="padding:10px 16px" onclick="load(1)">查询</button>
+  </div>
+  <div id="table-box"></div>
+  <div class="pager" id="pager"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  var API = (window.CWG_API_URL || '').replace(/\/+$/, '');
+  var at = localStorage.getItem('cwg_adm_at');
+  if (!at) { location.replace('admin-login.html'); return; }
+  document.getElementById('who').textContent = localStorage.getItem('cwg_adm_email') || '';
+
+  var page = 1, DATA = null;
+  var NEXT = {
+    pending: [['confirmed','确认付款']], confirmed: [['active','发放设备'], ['cancelled','取消']],
+    active: [['returned','确认归还']], returned: [['completed','退押金完成']],
+    completed: [], cancelled: [],
+  };
+
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function toast(t, err) {
+    var el = document.getElementById('toast');
+    el.textContent = t; el.className = 'toast show' + (err ? ' err' : '');
+    setTimeout(function(){ el.className = 'toast'; }, 2600);
+  }
+  window.logout = async function () {
+    try { await fetch(window.CWG_SB_URL + '/auth/v1/logout', { method:'POST', headers:{ apikey: window.CWG_SB_KEY, Authorization:'Bearer '+at } }); } catch(e){}
+    localStorage.removeItem('cwg_adm_at'); localStorage.removeItem('cwg_adm_email');
+    location.href = 'admin-login.html';
+  };
+
+  function authFetch(url, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({ Authorization: 'Bearer ' + at }, opts.headers || {});
+    return fetch(url, opts).then(function (r) {
+      if (r.status === 401) { location.replace('admin-login.html'); throw new Error('auth'); }
+      return r.json().then(function (j) { return { ok: r.ok, j: j }; });
+    });
+  }
+
+  window.load = function (p) {
+    page = p || 1;
+    var q = document.getElementById('q').value.trim();
+    var st = document.getElementById('status').value;
+    var po = document.getElementById('pendingOnly').checked ? '1' : '';
+    var qs = 'page=' + page + '&limit=15' + (st ? '&status=' + st : '') + (q ? '&q=' + encodeURIComponent(q) : '') + (po ? '&pending=1' : '');
+    authFetch(API + '/api/admin/orders?' + qs).then(function (v) {
+      if (!v.ok) throw new Error(v.j.error || 'load failed');
+      DATA = v.j;
+      renderStats(v.j.stats);
+      renderTable(v.j);
+      renderPager(v.j);
+    }).catch(function (e) { if (e.message !== 'auth') toast('加载失败：' + e.message, true); });
+  };
+
+  function renderStats(s) {
+    var b = s.by_status || {}, L = s.status_labels || {};
+    var items = [
+      ['总订单', s.total ?? '—', false],
+      ['⏳ 待审批', s.pending_approvals || 0, (s.pending_approvals || 0) > 0],
+    ].concat(Object.keys(L).map(function (k) { return [L[k], b[k] || 0, false]; }));
+    document.getElementById('stats').innerHTML = items.map(function (i) {
+      return '<div class="stat' + (i[2] ? ' hot' : '') + '"><div class="n">' + i[1] + '</div><div class="l">' + i[0] + '</div></div>';
+    }).join('');
+  }
+
+  function renderTable(j) {
+    var box = document.getElementById('table-box');
+    if (!j.orders || !j.orders.length) { box.innerHTML = '<div class="empty">📦 没有匹配的订单</div>'; return; }
+    box.innerHTML = '<table><thead><tr>'
+      + '<th>订单号</th><th>客户</th><th class="hide-md">城市/租期</th><th>金额</th><th>状态</th><th>操作</th></tr></thead><tbody>'
+      + j.orders.map(function (o) {
+        var ops = '<div class="ops">';
+        var pa = '';
+        if (o.pending_action) {
+          var isR = o.pending_action.type === 'reschedule';
+          pa = '<div class="pa-box">⏳ 待审批：' + (isR ? '改期 → ' + esc(o.pending_action.new_start) + ' ~ ' + esc(o.pending_action.new_end) : '取消申请') + '</div>';
+          ops += '<button class="op op-appr" onclick="act(\'' + o.order_no + '\',\'approve_' + o.pending_action.type + '\')">✓ 批准</button>'
+            + '<button class="op op-rej" onclick="act(\'' + o.order_no + '\',\'reject_' + o.pending_action.type + '\')">✕ 拒绝</button>';
+        } else {
+          (NEXT[o.status] || []).forEach(function (t) {
+            ops += '<button class="op op-next" onclick="setStatus(\'' + o.order_no + '\',\'' + t[0] + '\')">' + t[1] + '</button>';
+          });
+        }
+        ops += '<button class="op op-detail" onclick="var d=this.closest(\'tr\').nextElementSibling;d.style.display=d.style.display?\'\':\'none\'">详情</button></div>';
+        return '<tr><td class="ono">' + esc(o.order_no) + '<div style="font-size:11px;color:#94a3b8;font-weight:400">' + new Date(o.created_at).toLocaleString('zh-CN') + '</div></td>'
+          + '<td>' + esc(o.first_name + ' ' + (o.last_name || '')) + '<div style="color:#64748b;font-size:12px">' + esc(o.email) + (o.phone ? '<br>' + esc(o.phone) : '') + '</div></td>'
+          + '<td class="hide-md">' + esc(o.city || '—') + '<div style="color:#64748b;font-size:12px">' + esc(o.start_date || '?') + ' → ' + esc(o.end_date || '?') + '</div></td>'
+          + '<td>' + (o.currency || 'USD') + ' ' + (o.price_total ?? '—') + (o.deposit ? '<div style="font-size:11px;color:#64748b">押金 ' + o.deposit + '</div>' : '') + '</td>'
+          + '<td>' + pa + '<span class="badge b-' + o.status + '">' + (o.pending_action ? '等待审批' : esc(o.status_label)) + '</span></td>'
+          + '<td>' + ops + '</td></tr>'
+          + '<tr style="display:none"><td colspan="6" style="background:#f8fafc">'
+          + '<div class="detail-row">📶 套餐：<b>' + esc(o.plan_type || '—') + '</b> × ' + (o.num_devices || 1) + ' 台 · 配送：<b>' + esc(o.delivery_method || '—') + '</b>' + (o.delivery_address ? ' · ' + esc(o.delivery_address) : '') + '</div>'
+          + '<div class="detail-row">💳 支付：<b>' + esc(o.payment_method || '—') + '</b>' + (o.transaction_id ? ' · 流水号 ' + esc(o.transaction_id) : '') + '</div>'
+          + '<div class="detail-row">📝 ' + esc(o.notes || '无备注') + '</div>'
+          + '<div class="detail-row">🕒 更新：' + new Date(o.updated_at || o.created_at).toLocaleString('zh-CN') + '</div>'
+          + '</td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+
+  function renderPager(j) {
+    var pages = Math.ceil((j.total || 0) / j.limit);
+    var el = document.getElementById('pager');
+    if (pages <= 1) { el.innerHTML = ''; return; }
+    el.innerHTML = '<button ' + (page <= 1 ? 'disabled' : '') + ' onclick="load(' + (page - 1) + ')">← 上一页</button>'
+      + ' 第 ' + page + ' / ' + pages + ' 页（共 ' + j.total + ' 单）'
+      + '<button ' + (page >= pages ? 'disabled' : '') + ' onclick="load(' + (page + 1) + ')">下一页 →</button>';
+  }
+
+  window.setStatus = function (ono, status) {
+    var note = prompt('备注（可选，会邮件告知客户）：') || '';
+    authFetch(API + '/api/admin/orders', { method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_no: ono, action: 'status', status: status, note: note })
+    }).then(function (v) {
+      if (!v.ok) throw new Error(v.j.error || 'failed');
+      toast('✓ ' + ono + ' → ' + status + '（已邮件通知客户）');
+      load(page);
+    }).catch(function (e) { if (e.message !== 'auth') toast(e.message, true); });
+  };
+
+  window.act = function (ono, action) {
+    if (action === 'approve_reschedule') {
+      if (!confirm('批准该改期申请？批准后系统将轮换客户管理链接并自动邮件通知。')) return;
+    } else if (action === 'reject_reschedule') {
+      var r1 = prompt('拒绝原因（可选）：') || '';
+      return doAct(ono, action, { reason: r1 });
+    } else if (action === 'approve_cancel') {
+      var r2 = prompt('批准取消 · 给客户的说明（可选，默认含退押金提示）：') || '';
+      return doAct(ono, action, { note: r2 });
+    } else if (action === 'reject_cancel') {
+      var r3 = prompt('拒绝原因（必填给客户看）：') || '';
+      return doAct(ono, action, { reason: r3 });
+    }
+    doAct(ono, action, {});
+  };
+  function doAct(ono, action, extra) {
+    authFetch(API + '/api/admin/orders', { method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.assign({ order_no: ono, action: action }, extra))
+    }).then(function (v) {
+      if (!v.ok) throw new Error(v.j.error || 'failed');
+      toast('✓ 已处理（' + action + '）');
+      load(page);
+    }).catch(function (e) { if (e.message !== 'auth') toast(e.message, true); });
+  }
+
+  load(1);
+  setInterval(function () { load(page); }, 60000); // 每分钟自动刷新
+})();
+</script>
+</body>
+</html>

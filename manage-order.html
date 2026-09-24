@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Order | ChinaWiFiGo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#6366f1">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.chinawifigo.com https://*.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<script>window.CWG_API_URL = 'https://api.chinawifigo.com';
+  try { var _ap = new URLSearchParams(location.search).get('api'); if (_ap) window.CWG_API_URL = _ap; } catch(e) {}</script>
+<style>
+  .mg-wrap { min-height:100vh; background:linear-gradient(160deg,#eef2ff,#f8fafc); padding:32px 16px; }
+  .mg-card { background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(99,102,241,.12); padding:32px; width:100%; max-width:600px; margin:0 auto; }
+  .mg-head { text-align:center; margin-bottom:20px; }
+  .mg-head .icon { font-size:40px; } .mg-head h1 { font-size:22px; color:var(--primary,#6366f1); margin:8px 0 4px; }
+  .kv { display:flex; justify-content:space-between; padding:10px 2px; border-bottom:1px solid #f1f5f9; font-size:14px; gap:12px; }
+  .kv .k { color:#64748b; white-space:nowrap; } .kv .v { font-weight:600; color:#0f172a; text-align:right; }
+  .badge { display:inline-block; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; }
+  .b-pending{background:#fff7ed;color:#c2410c}.b-confirmed{background:#eff6ff;color:#1d4ed8}.b-active{background:#f0fdf4;color:#15803d}
+  .b-returned{background:#faf5ff;color:#7e22ce}.b-completed{background:#f1f5f9;color:#475569}.b-cancelled{background:#fef2f2;color:#b91c1c}
+  .b-pendingappr{background:#fefce8;color:#a16207}
+  .actions { margin-top:24px; display:flex; flex-direction:column; gap:10px; }
+  .btn-act { padding:13px; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; border:0; }
+  .btn-reschedule { background:var(--primary,#6366f1); color:#fff; }
+  .btn-cancel { background:#fff; color:#b91c1c; border:1.5px solid #fecaca; }
+  .btn-reschedule:hover{filter:brightness(1.06)} .btn-cancel:hover{background:#fef2f2}
+  .msg { padding:12px 14px; border-radius:8px; font-size:14px; margin-top:14px; display:none; }
+  .msg.ok { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; display:block; }
+  .msg.err { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; display:block; }
+  .msg.info { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; display:block; }
+  .panel { display:none; margin-top:16px; padding:18px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0; }
+  .panel.open { display:block; }
+  .field { margin-bottom:12px; }
+  .field label { display:block; font-size:13px; font-weight:600; color:#334155; margin-bottom:6px; }
+  .field input { width:100%; box-sizing:border-box; padding:11px 12px; border:1.5px solid #e2e8f0; border-radius:8px; font-size:14px; }
+  .loading { text-align:center; color:#94a3b8; padding:40px; }
+  .home-link{display:inline-block;margin-bottom:6px;font-size:13px;color:#64748b;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="mg-wrap">
+  <div class="mg-card">
+    <a class="home-link" href="index.html">← Back to ChinaWiFiGo</a>
+    <div class="mg-head"><div class="icon">📶</div><h1>Your Order</h1></div>
+    <div class="loading" id="loading">Loading…</div>
+    <div id="body" style="display:none">
+      <div id="summary"></div>
+      <div class="msg" id="msg"></div>
+      <div class="actions" id="actions"></div>
+      <div class="panel" id="reschedule-panel">
+        <div class="field"><label for="ns">New start date</label><input type="date" id="ns"></div>
+        <div class="field"><label for="ne">New end date</label><input type="date" id="ne"></div>
+        <div class="field"><label for="rn">Note (optional)</label><input id="rn" maxlength="300" placeholder="Anything we should know"></div>
+        <button class="btn-act btn-reschedule" id="rs-btn" onclick="submitReschedule()">Request Reschedule</button>
+        <p style="font-size:12px;color:#94a3b8;margin:10px 0 0">Free changes up to 96 hours before pick-up; subject to availability — we confirm within 24h.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var API = (window.CWG_API_URL || '').replace(/\/+$/, '');
+  var p = new URLSearchParams(location.search);
+  var ORDER_NO = p.get('order_no') || '', TOKEN = p.get('token') || '';
+  var ORDER = null;
+
+  var ST = {
+    pending:['Pending verification','b-pending'], confirmed:['Payment confirmed','b-confirmed'],
+    active:['Active — enjoy!','b-active'], returned:['Device returned','b-returned'],
+    completed:['Completed','b-completed'], cancelled:['Cancelled','b-cancelled'],
+  };
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  if (!ORDER_NO || !TOKEN) {
+    document.getElementById('loading').innerHTML = 'Missing order link. Please use the "View My Order" button in your confirmation email.';
+    return;
+  }
+
+  fetch(API + '/api/orders?order_no=' + encodeURIComponent(ORDER_NO) + '&token=' + encodeURIComponent(TOKEN))
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+    .then(function (v) {
+      document.getElementById('loading').style.display = 'none';
+      if (!v.ok) {
+        var msg = document.getElementById('msg');
+        msg.className = 'msg err';
+        msg.textContent = v.j.error || 'Cannot load this order';
+        document.getElementById('body').style.display = '';
+        document.getElementById('summary').innerHTML = '<div class="kv"><span class="k">Order</span><span class="v">' + esc(ORDER_NO) + '</span></div>';
+        return;
+      }
+      ORDER = v.j.order;
+      render();
+    })
+    .catch(function () {
+      document.getElementById('loading').textContent = 'Network error — please refresh.';
+    });
+
+  function render() {
+    document.getElementById('body').style.display = '';
+    var o = ORDER;
+    var badge = o.pending_action
+      ? '<span class="badge b-pendingappr">⏳ ' + (o.pending_action.type === 'reschedule' ? 'Reschedule under review' : 'Cancellation under review') + '</span>'
+      : '<span class="badge ' + (ST[o.status]||['','b-completed'])[1] + '">' + (ST[o.status]||[o.status])[0] + '</span>';
+    document.getElementById('summary').innerHTML =
+      '<div class="kv"><span class="k">Order</span><span class="v">' + esc(o.order_no) + '</span></div>'
+      + '<div class="kv"><span class="k">Status</span><span class="v">' + badge + '</span></div>'
+      + '<div class="kv"><span class="k">Name</span><span class="v">' + esc((o.first_name||'')+' '+(o.last_name||'')) + '</span></div>'
+      + '<div class="kv"><span class="k">City</span><span class="v">' + esc(o.city||'—') + '</span></div>'
+      + '<div class="kv"><span class="k">Devices</span><span class="v">× ' + (o.num_devices||1) + ' · ' + esc(o.plan_type||'—') + '</span></div>'
+      + '<div class="kv"><span class="k">Rental</span><span class="v">' + esc(o.start_date||'?') + ' → ' + esc(o.end_date||'?') + '</span></div>'
+      + '<div class="kv"><span class="k">Delivery</span><span class="v">' + esc(o.delivery_method||'—') + (o.delivery_address ? ' · ' + esc(o.delivery_address) : '') + '</span></div>'
+      + '<div class="kv"><span class="k">Total</span><span class="v">' + esc(o.currency||'USD') + ' ' + (o.price_total||0) + '</span></div>';
+
+    var acts = document.getElementById('actions');
+    var canAct = ['pending','confirmed'].includes(o.status) && !o.pending_action;
+    if (o.pending_action) {
+      acts.innerHTML = '<div class="msg info" style="margin:0">Your ' + (o.pending_action.type === 'reschedule' ? 'reschedule' : 'cancellation') + ' request is under review. We\'ll email you within 24 hours.</div>';
+    } else if (canAct) {
+      acts.innerHTML = '<button class="btn-act btn-reschedule" onclick="togglePanel()">📅 Reschedule Dates</button>'
+        + '<button class="btn-act btn-cancel" onclick="doCancel()">✕ Cancel Booking</button>';
+    } else if (o.status !== 'cancelled' && o.status !== 'completed') {
+      acts.innerHTML = '<p style="font-size:13px;color:#94a3b8;text-align:center">Order is ' + esc(o.status) + '. For changes, please <a href="contact.html" style="color:var(--primary,#6366f1)">contact us</a>.</p>';
+    } else {
+      acts.innerHTML = '';
+    }
+    if (canAct) {
+      document.getElementById('ns').min = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      document.getElementById('ne').min = new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10);
+    }
+  }
+
+  window.togglePanel = function () {
+    document.getElementById('reschedule-panel').classList.toggle('open');
+  };
+
+  window.submitReschedule = async function () {
+    var btn = document.getElementById('rs-btn'), msg = document.getElementById('msg');
+    var ns = document.getElementById('ns').value, ne = document.getElementById('ne').value;
+    if (!ns || !ne || ne <= ns) { msg.className='msg err'; msg.textContent='Please pick valid dates (end after start).'; return; }
+    btn.disabled = true; btn.textContent = 'Submitting…';
+    try {
+      var r = await fetch(API + '/api/orders', {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_no: ORDER_NO, token: TOKEN, action: 'reschedule', new_start: ns, new_end: ne, note: document.getElementById('rn').value })
+      });
+      var j = await r.json();
+      if (!r.ok) throw new Error(j.error || 'Failed');
+      msg.className = 'msg ok';
+      msg.textContent = j.message || 'Request submitted!';
+      ORDER.pending_action = { type: 'reschedule' };
+      render();
+    } catch (e) { msg.className='msg err'; msg.textContent = e.message; }
+    finally { btn.disabled = false; btn.textContent = 'Request Reschedule'; }
+  };
+
+  window.doCancel = async function () {
+    var msg = document.getElementById('msg');
+    if (!confirm('Cancel this booking?\n\n· ≥96h before pick-up: free, instant cancel\n· <96h: forwarded to our team (deposit refund case-by-case)')) return;
+    try {
+      var r = await fetch(API + '/api/orders', {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_no: ORDER_NO, token: TOKEN, action: 'cancel' })
+      });
+      var j = await r.json();
+      if (!r.ok) throw new Error(j.error || 'Failed');
+      msg.className = 'msg ok';
+      msg.textContent = j.message;
+      if (j.status === 'cancelled') ORDER.status = 'cancelled'; else ORDER.pending_action = { type: 'cancel' };
+      render();
+    } catch (e) { msg.className='msg err'; msg.textContent = e.message; }
+  };
+})();
+</script>
+</body>
+</html>

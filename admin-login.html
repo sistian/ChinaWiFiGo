@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Sign In | ChinaWiFiGo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#6366f1">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.chinawifigo.com https://*.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<script>
+  window.CWG_SB_URL = 'https://tybexleyjssmlqkuggdb.supabase.co';
+  try { var _ap = new URLSearchParams(location.search).get('api'); if (_ap) window.CWG_API_URL = _ap; } catch(e) {}
+  window.CWG_SB_KEY = 'sb_publishable_quWIGt374JA2r1keV07jCQ_xZ6B3GTR';
+</script>
+<style>
+  .auth-wrap{min-height:100vh;background:linear-gradient(160deg,#312e81,#1e1b4b);display:flex;align-items:center;justify-content:center;padding:24px}
+  .auth-card{background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.3);padding:36px;width:100%;max-width:400px}
+  .auth-logo{text-align:center}
+  .auth-logo .icon{font-size:40px}
+  .auth-logo h1{font-size:20px;color:#1e1b4b;margin:8px 0 4px}
+  .auth-logo p{color:#64748b;font-size:13px;margin:0 0 22px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6px}
+  .field input{width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:15px}
+  .field input:focus{outline:none;border-color:#6366f1}
+  .btn-primary{width:100%;background:#1e1b4b;color:#fff;border:0;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px}
+  .btn-primary:disabled{opacity:.6;cursor:wait}
+  .msg{padding:12px 14px;border-radius:8px;font-size:14px;margin-bottom:16px;display:none}
+  .msg.err{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;display:block}
+  .lock-note{text-align:center;font-size:12px;color:#94a3b8;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="icon">🔐</div>
+      <h1>Admin Console</h1>
+      <p>ChinaWiFiGo 管理后台 · 仅限授权人员</p>
+    </div>
+    <div class="msg" id="msg"></div>
+    <form onsubmit="return doLogin(event)">
+      <div class="field"><label for="email">Admin Email</label>
+        <input id="email" type="email" required autocomplete="email" placeholder="admin@example.com">
+      </div>
+      <div class="field"><label for="password">Password</label>
+        <input id="password" type="password" required autocomplete="current-password">
+      </div>
+      <button class="btn-primary" id="btn" type="submit">Sign In</button>
+    </form>
+    <div class="lock-note">此账号不在管理员白名单将无法进入</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SB = window.CWG_SB_URL, KEY = window.CWG_SB_KEY;
+  if (localStorage.getItem('cwg_adm_at')) { location.replace('admin.html'); return; }
+
+  window.doLogin = async function (ev) {
+    ev.preventDefault();
+    var email = document.getElementById('email').value.trim();
+    var pw = document.getElementById('password').value;
+    var btn = document.getElementById('btn'), msg = document.getElementById('msg');
+    msg.className = 'msg';
+    btn.disabled = true; btn.textContent = 'Signing in…';
+    try {
+      var r = await fetch(SB + '/auth/v1/token?grant_type=password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: KEY },
+        body: JSON.stringify({ email: email, password: pw })
+      });
+      var j = await r.json();
+      if (!r.ok) throw new Error(j.error_description || 'Login failed');
+      localStorage.setItem('cwg_adm_at', j.access_token);
+      localStorage.setItem('cwg_adm_email', email);
+      location.href = 'admin.html';
+    } catch (e) {
+      msg.className = 'msg err';
+      msg.textContent = (e.message === 'Invalid login credentials') ? '邮箱或密码错误，或此账号不是管理员。' : e.message;
+    } finally { btn.disabled = false; btn.textContent = 'Sign In'; }
+    return false;
+  };
+})();
+</script>
+</body>
+</html>

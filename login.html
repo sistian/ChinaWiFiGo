@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In / Create Account | ChinaWiFiGo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#6366f1">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.chinawifigo.com https://*.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<script>
+  window.CWG_API_URL = 'https://api.chinawifigo.com';
+  try { var _ap = new URLSearchParams(location.search).get('api'); if (_ap) window.CWG_API_URL = _ap; } catch(e) {}
+  window.CWG_SB_URL = 'https://tybexleyjssmlqkuggdb.supabase.co';
+  window.CWG_SB_KEY = 'sb_publishable_qmWIGt374JA2r1keV07jCQ_xZ6B3GTR';
+</script>
+<style>
+  .auth-wrap { min-height: 100vh; background: linear-gradient(160deg, #eef2ff 0%, #f8fafc 100%); display:flex; align-items:center; justify-content:center; padding: 24px; }
+  .auth-card { background:#fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(99,102,241,.12); padding: 36px; width: 100%; max-width: 420px; }
+  .auth-logo { text-align:center; font-size: 40px; }
+  .auth-logo h1 { font-size: 22px; color: var(--primary, #6366f1); margin: 8px 0 4px; }
+  .auth-logo p { color: #64748b; font-size: 14px; margin: 0; }
+  .auth-tabs { display:flex; gap:8px; margin: 24px 0 20px; background:#f1f5f9; border-radius: 10px; padding: 4px; }
+  .auth-tabs button { flex:1; border:0; background:transparent; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; color:#64748b; font-size: 14px; }
+  .auth-tabs button.active { background:#fff; color: var(--primary,#6366f1); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .field { margin-bottom: 14px; }
+  .field label { display:block; font-size: 13px; font-weight:600; color:#334155; margin-bottom:6px; }
+  .field input { width:100%; box-sizing:border-box; padding: 12px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 15px; transition: border .15s; }
+  .field input:focus { outline:none; border-color: var(--primary,#6366f1); }
+  .btn-primary { width:100%; background: var(--primary,#6366f1); color:#fff; border:0; padding: 13px; border-radius: 8px; font-size:15px; font-weight:700; cursor:pointer; margin-top: 6px; }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-primary:disabled { opacity:.6; cursor: wait; }
+  .msg { padding: 12px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 16px; display:none; }
+  .msg.ok { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; display:block; }
+  .msg.err { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; display:block; }
+  .auth-foot { text-align:center; margin-top:18px; font-size:13px; color:#94a3b8; }
+  .auth-foot a { color: var(--primary,#6366f1); text-decoration:none; font-weight:600; }
+  .home-link { display:inline-block; margin-bottom: 6px; font-size:13px; color:#64748b; text-decoration:none; }
+  .home-link:hover { color: var(--primary,#6366f1); }
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <a class="home-link" href="index.html">← Back to ChinaWiFiGo</a>
+    <div class="auth-logo">
+      <div>📶</div>
+      <h1 id="title">Welcome back</h1>
+      <p id="subtitle">Sign in to view your orders</p>
+    </div>
+    <div class="msg" id="msg"></div>
+    <div class="auth-tabs">
+      <button id="tab-login" class="active" onclick="switchTab('login')">Sign In</button>
+      <button id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+    </div>
+    <form id="form" onsubmit="return submitForm(event)">
+      <div class="field"><label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field"><label for="password">Password</label>
+        <input id="password" type="password" required minlength="6" autocomplete="current-password" placeholder="At least 6 characters">
+      </div>
+      <div class="field" id="confirm-field" style="display:none"><label for="confirm">Confirm Password</label>
+        <input id="confirm" type="password" minlength="6" autocomplete="new-password" placeholder="Type it again">
+      </div>
+      <button class="btn-primary" id="submit-btn" type="submit">Sign In</button>
+    </form>
+    <div class="auth-foot">
+      Just want to check one order? <a href="order-lookup.html">Look up an order →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SB = window.CWG_SB_URL, KEY = window.CWG_SB_KEY;
+  var params = new URLSearchParams(location.search);
+  var msg = document.getElementById('msg');
+
+  // 已登录直接进账户
+  var at = localStorage.getItem('cwg_at');
+  if (at && !params.get('confirmed')) { location.replace('account.html'); return; }
+  if (params.get('confirmed') === '1') {
+    msg.className = 'msg ok';
+    msg.textContent = '✅ Email confirmed! You can sign in now.';
+  }
+
+  var mode = 'login';
+  window.switchTab = function (m) {
+    mode = m;
+    document.getElementById('tab-login').classList.toggle('active', m === 'login');
+    document.getElementById('tab-signup').classList.toggle('active', m === 'signup');
+    document.getElementById('confirm-field').style.display = m === 'signup' ? '' : 'none';
+    document.getElementById('title').textContent = m === 'login' ? 'Welcome back' : 'Create your account';
+    document.getElementById('subtitle').textContent = m === 'login' ? 'Sign in to view your orders' : 'Track orders, reschedule & manage bookings easily';
+    document.getElementById('submit-btn').textContent = m === 'login' ? 'Sign In' : 'Create Account';
+    msg.className = 'msg';
+  };
+
+  window.submitForm = async function (ev) {
+    ev.preventDefault();
+    var email = document.getElementById('email').value.trim();
+    var pw = document.getElementById('password').value;
+    var btn = document.getElementById('submit-btn');
+    msg.className = 'msg';
+
+    if (mode === 'signup') {
+      var cf = document.getElementById('confirm').value;
+      if (pw !== cf) { msg.className='msg err'; msg.textContent='Passwords do not match.'; return false; }
+      if (pw.length < 8) { msg.className='msg err'; msg.textContent='Please use at least 8 characters for safety.'; return false; }
+    }
+
+    btn.disabled = true; btn.textContent = mode === 'login' ? 'Signing in…' : 'Creating…';
+    try {
+      if (mode === 'login') {
+        var r = await fetch(SB + '/auth/v1/token?grant_type=password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: KEY },
+          body: JSON.stringify({ email: email, password: pw })
+        });
+        var j = await r.json();
+        if (!r.ok) throw new Error(j.error_description || j.msg || 'Sign-in failed');
+        localStorage.setItem('cwg_at', j.access_token);
+        localStorage.setItem('cwg_email', email);
+        location.href = 'account.html';
+      } else {
+        var r2 = await fetch(SB + '/auth/v1/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: KEY },
+          body: JSON.stringify({
+            email: email, password: pw,
+            options: { emailRedirectTo: location.origin + '/login.html?confirmed=1' }
+          })
+        });
+        var j2 = await r2.json();
+        if (!r2.ok) throw new Error(j2.error_description || j2.msg || 'Sign-up failed');
+        if (j2.session) {
+          localStorage.setItem('cwg_at', j2.access_token);
+          localStorage.setItem('cwg_email', email);
+          location.href = 'account.html';
+        } else {
+          msg.className = 'msg ok';
+          msg.textContent = '📧 Confirmation email sent! Please check your inbox (and spam folder) and click the link to activate your account.';
+          document.getElementById('form').style.display = 'none';
+        }
+      }
+    } catch (e) {
+      msg.className = 'msg err';
+      msg.textContent = e.message === 'Invalid login credentials' ? 'Wrong email or password.' : (e.message || 'Something went wrong');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = mode === 'login' ? 'Sign In' : 'Create Account';
+    }
+    return false;
+  };
+})();
+</script>
+</body>
+</html>

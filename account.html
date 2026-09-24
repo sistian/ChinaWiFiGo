@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account | ChinaWiFiGo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#6366f1">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.chinawifigo.com https://*.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<script>
+  window.CWG_API_URL = 'https://api.chinawifigo.com';
+  try { var _ap = new URLSearchParams(location.search).get('api'); if (_ap) window.CWG_API_URL = _ap; } catch(e) {}
+  window.CWG_SB_URL = 'https://tybexleyjssmlqkuggdb.supabase.co';
+  window.CWG_SB_KEY = 'sb_publishable_quWIGt374JA2r1keV07jCQ_xZ6B3GTR';
+</script>
+<style>
+  .acct-wrap { min-height: 100vh; background:#f8fafc; padding: 24px 16px; }
+  .acct-inner { max-width: 760px; margin: 0 auto; }
+  .acct-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .acct-head h1 { font-size: 22px; color:#1e293b; margin:0; }
+  .acct-head .who { color:#64748b; font-size: 14px; }
+  .btn-logout { background:#fff; border:1.5px solid #e2e8f0; color:#475569; padding:9px 18px; border-radius:8px; cursor:pointer; font-weight:600; font-size:14px; }
+  .btn-logout:hover { border-color: #f87171; color:#dc2626; }
+  .order-card { background:#fff; border-radius: 12px; border:1px solid #e2e8f0; padding: 20px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  .order-top { display:flex; justify-content:space-between; align-items:flex-start; gap: 10px; flex-wrap: wrap; }
+  .order-no { font-weight: 700; color:#334155; font-size: 15px; }
+  .order-date { color:#94a3b8; font-size: 12px; }
+  .badge { display:inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .b-pending { background:#fff7ed; color:#c2410c; } .b-confirmed { background:#eff6ff; color:#1d4ed8; }
+  .b-active { background:#f0fdf4; color:#15803d; } .b-returned { background:#faf5ff; color:#7e22ce; }
+  .b-completed { background:#f1f5f9; color:#475569; } .b-cancelled { background:#fef2f2; color:#b91c1c; }
+  .b-pendingappr { background:#fefce8; color:#a16207; }
+  .order-meta { display:flex; gap: 20px; margin-top: 12px; flex-wrap: wrap; color:#475569; font-size: 14px; }
+  .order-meta b { color:#0f172a; }
+  .order-actions { margin-top: 12px; }
+  .order-actions a { color: var(--primary,#6366f1); font-size: 13px; font-weight: 600; text-decoration: none; }
+  .empty { text-align:center; padding: 60px 20px; color:#94a3b8; }
+  .empty .icon { font-size: 44px; margin-bottom: 10px; }
+  .empty a { color: var(--primary,#6366f1); font-weight: 600; }
+  .loading { text-align:center; color:#94a3b8; padding: 40px; }
+</style>
+</head>
+<body>
+<div class="acct-wrap">
+  <div class="acct-inner">
+    <div class="acct-head">
+      <div>
+        <a href="index.html" style="font-size:13px;color:#64748b;text-decoration:none">← ChinaWiFiGo</a>
+        <h1>My Orders</h1>
+        <div class="who" id="who"></div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Sign out</button>
+    </div>
+    <div class="loading" id="loading">Loading your orders…</div>
+    <div id="list"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var API = (window.CWG_API_URL || '').replace(/\/+$/, '');
+  var at = localStorage.getItem('cwg_at');
+  var email = localStorage.getItem('cwg_email');
+  if (!at) { location.replace('login.html'); return; }
+  document.getElementById('who').textContent = email || '';
+
+  var ST = {
+    pending: ['Pending verification', 'b-pending'], confirmed: ['Confirmed', 'b-confirmed'],
+    active: ['Active', 'b-active'], returned: ['Returned', 'b-returned'],
+    completed: ['Completed', 'b-completed'], cancelled: ['Cancelled', 'b-cancelled'],
+  };
+
+  window.logout = async function () {
+    try {
+      await fetch(window.CWG_SB_URL + '/auth/v1/logout', {
+        method: 'POST', headers: { apikey: window.CWG_SB_KEY, Authorization: 'Bearer ' + at }
+      });
+    } catch (e) {}
+    localStorage.removeItem('cwg_at'); localStorage.removeItem('cwg_email');
+    location.href = 'login.html';
+  };
+
+  fetch(API + '/api/account/orders', { headers: { Authorization: 'Bearer ' + at } })
+    .then(function (r) {
+      if (r.status === 401) { localStorage.removeItem('cwg_at'); location.replace('login.html'); throw new Error('auth'); }
+      return r.json();
+    })
+    .then(function (j) {
+      document.getElementById('loading').style.display = 'none';
+      var box = document.getElementById('list');
+      if (!j.orders || !j.orders.length) {
+        box.innerHTML = '<div class="empty"><div class="icon">📦</div>No orders yet.<br><a href="booking.html">Book your pocket WiFi →</a></div>';
+        return;
+      }
+      box.innerHTML = j.orders.map(function (o) {
+        var badge = o.pending_action
+          ? '<span class="badge b-pendingappr">⏳ ' + (o.pending_action.type === 'reschedule' ? 'Reschedule under review' : 'Cancellation under review') + '</span>'
+          : '<span class="badge ' + (ST[o.status] || [o.status, 'b-completed'])[1] + '">' + (ST[o.status] || [o.status])[0] + '</span>';
+        return '<div class="order-card">'
+          + '<div class="order-top"><div><div class="order-no">' + esc(o.order_no) + '</div>'
+          + '<div class="order-date">Booked ' + new Date(o.created_at).toLocaleDateString() + '</div></div>' + badge + '</div>'
+          + '<div class="order-meta">'
+          + '<span>📍 <b>' + esc(o.city || '—') + '</b></span>'
+          + '<span>📅 ' + esc(o.start_date || '?') + ' → ' + esc(o.end_date || '?') + '</span>'
+          + '<span>📶 × ' + (o.num_devices || 1) + '</span>'
+          + '<span>💰 ' + esc(o.currency || 'USD') + ' ' + (o.price_total || 0) + '</span>'
+          + '</div>'
+          + '<div class="order-actions"><a href="order-lookup.html?order_no=' + encodeURIComponent(o.order_no) + '&email=' + encodeURIComponent(email || '') + '">View details & manage →</a></div>'
+          + '</div>';
+      }).join('');
+    })
+    .catch(function (e) { if (e.message !== 'auth') { document.getElementById('loading').textContent = 'Failed to load. Please refresh.'; } });
+
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+})();
+</script>
+</body>
+</html>

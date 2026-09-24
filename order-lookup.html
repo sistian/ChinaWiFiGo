@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Lookup | ChinaWiFiGo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#6366f1">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.chinawifigo.com https://*.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<script>window.CWG_API_URL = 'https://api.chinawifigo.com';
+  try { var _ap = new URLSearchParams(location.search).get('api'); if (_ap) window.CWG_API_URL = _ap; } catch(e) {}</script>
+<style>
+  .lookup-wrap { min-height:100vh; background:linear-gradient(160deg,#eef2ff,#f8fafc); display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; }
+  .lookup-card { background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(99,102,241,.12); padding:36px; width:100%; max-width:520px; }
+  .lk-logo { text-align:center; font-size:40px; }
+  .lk-logo h1 { font-size:22px; color:var(--primary,#6366f1); margin:8px 0 4px; }
+  .lk-logo p { color:#64748b; font-size:14px; margin:0 0 22px; }
+  .field { margin-bottom:14px; }
+  .field label { display:block; font-size:13px; font-weight:600; color:#334155; margin-bottom:6px; }
+  .field input { width:100%; box-sizing:border-box; padding:12px 14px; border:1.5px solid #e2e8f0; border-radius:8px; font-size:15px; }
+  .field input:focus { outline:none; border-color:var(--primary,#6366f1); }
+  .btn-primary { width:100%; background:var(--primary,#6366f1); color:#fff; border:0; padding:13px; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; }
+  .btn-primary:disabled { opacity:.6; cursor:wait; }
+  .result { margin-top: 20px; }
+  .kv { display:flex; justify-content:space-between; padding:10px 2px; border-bottom:1px solid #f1f5f9; font-size:14px; }
+  .kv .k { color:#64748b; } .kv .v { font-weight:600; color:#0f172a; text-align:right; }
+  .badge { display:inline-block; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; }
+  .b-pending { background:#fff7ed; color:#c2410c; } .b-confirmed { background:#eff6ff; color:#1d4ed8; }
+  .b-active { background:#f0fdf4; color:#15803d; } .b-returned { background:#faf5ff; color:#7e22ce; }
+  .b-completed { background:#f1f5f9; color:#475569; } .b-cancelled { background:#fef2f2; color:#b91c1c; }
+  .b-pendingappr { background:#fefce8; color:#a16207; }
+  .msg { padding:12px 14px; border-radius:8px; font-size:14px; margin-top:16px; display:none; }
+  .msg.err { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; display:block; }
+  .home-link { display:inline-block; margin-bottom:6px; font-size:13px; color:#64748b; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="lookup-wrap">
+  <div class="lookup-card">
+    <a class="home-link" href="index.html">← Back to ChinaWiFiGo</a>
+    <div class="lk-logo">
+      <div>🔍</div>
+      <h1>Find your order</h1>
+      <p>Enter your order number and the email you booked with</p>
+    </div>
+    <form onsubmit="return doLookup(event)">
+      <div class="field"><label for="ono">Order Number</label>
+        <input id="ono" required placeholder="CWG-20260924-XXXXXX" autocomplete="off">
+      </div>
+      <div class="field"><label for="oemail">Email used for booking</label>
+        <input id="oemail" type="email" required placeholder="you@example.com">
+      </div>
+      <button class="btn-primary" id="btn" type="submit">Find My Order</button>
+    </form>
+    <div class="msg" id="err"></div>
+    <div class="result" id="result"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var API = (window.CWG_API_URL || '').replace(/\/+$/, '');
+  var p = new URLSearchParams(location.search);
+  if (p.get('order_no')) document.getElementById('ono').value = p.get('order_no');
+  if (p.get('email')) { document.getElementById('oemail').value = p.get('email'); if (p.get('order_no')) doLookup({ preventDefault: function(){} }); }
+
+  var ST = {
+    pending: ['Pending verification', 'b-pending'], confirmed: ['Payment confirmed', 'b-confirmed'],
+    active: ['Active — enjoy!', 'b-active'], returned: ['Device returned', 'b-returned'],
+    completed: ['Completed', 'b-completed'], cancelled: ['Cancelled', 'b-cancelled'],
+  };
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  window.doLookup = async function (ev) {
+    ev.preventDefault();
+    var no = document.getElementById('ono').value.trim();
+    var em = document.getElementById('oemail').value.trim();
+    var btn = document.getElementById('btn');
+    var err = document.getElementById('err'), res = document.getElementById('result');
+    err.className = 'msg'; res.innerHTML = '';
+    btn.disabled = true; btn.textContent = 'Searching…';
+    try {
+      var r = await fetch(API + '/api/orders?order_no=' + encodeURIComponent(no) + '&email=' + encodeURIComponent(em));
+      var j = await r.json();
+      if (!r.ok) throw new Error(j.error || 'Order not found');
+      var o = j.order;
+      var badge = o.pending_action
+        ? '<span class="badge b-pendingappr">⏳ ' + (o.pending_action.type === 'reschedule' ? 'Reschedule under review' : 'Cancellation under review') + '</span>'
+        : '<span class="badge ' + (ST[o.status]||['','b-completed'])[1] + '">' + (ST[o.status]||[o.status])[0] + '</span>';
+      res.innerHTML = '<div class="kv"><span class="k">Order</span><span class="v">' + esc(o.order_no) + '</span></div>'
+        + '<div class="kv"><span class="k">Status</span><span class="v">' + badge + '</span></div>'
+        + '<div class="kv"><span class="k">Name</span><span class="v">' + esc((o.first_name||'') + ' ' + (o.last_name||'')) + '</span></div>'
+        + '<div class="kv"><span class="k">City</span><span class="v">' + esc(o.city||'—') + '</span></div>'
+        + '<div class="kv"><span class="k">Plan</span><span class="v">' + esc(o.plan_type||'—') + ' × ' + (o.num_devices||1) + '</span></div>'
+        + '<div class="kv"><span class="k">Rental</span><span class="v">' + esc(o.start_date||'?') + ' → ' + esc(o.end_date||'?') + '</span></div>'
+        + '<div class="kv"><span class="k">Delivery</span><span class="v">' + esc(o.delivery_method||'—') + '</span></div>'
+        + '<div class="kv"><span class="k">Total</span><span class="v">' + esc(o.currency||'USD') + ' ' + (o.price_total||0) + ' <small style="color:#94a3b8">(incl. deposit)</small></span></div>'
+        + '<p style="font-size:13px;color:#94a3b8;margin-top:14px">Need to reschedule or cancel? Use the "View My Order" link in your confirmation email — or <a href="contact.html" style="color:var(--primary,#6366f1)">contact us</a>.</p>';
+    } catch (e) {
+      err.className = 'msg err';
+      err.textContent = e.message || 'Lookup failed';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Find My Order';
+    }
+    return false;
+  };
+})();
+</script>
+</body>
+</html>
