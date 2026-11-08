@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#1e1b4b">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="style.css">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.chinawifigo.com https://*.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: https://www.google-analytics.com; connect-src 'self' https://api.chinawifigo.com https://*.supabase.co https://www.google-analytics.com https://region1.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
 <script>window.CWG_API_URL = 'https://api.chinawifigo.com';
   try { var _ap = new URLSearchParams(location.search).get('api'); if (_ap) window.CWG_API_URL = _ap; } catch(e) {}</script>
 <style>
@@ -216,5 +216,6 @@
   setInterval(function () { load(page); }, 60000); // 每分钟自动刷新
 })();
 </script>
+  <script src="analytics.js" defer></script>
 </body>
 </html>
