@@ -16,7 +16,7 @@
   // ★↓↓ 站点配置（换站只需改这里） ★↓↓
   var SITE = {
   "name": "chinawifigo",
-  "gaId": "G-2HLM69VSTL",
+  "gaId": "G-32MC9VPTY0",
   "forms": {
     "cwgContactForm": "contact_submit",
     "quoteForm": "quote_submit",
