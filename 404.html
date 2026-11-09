@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Page Not Found | ChinaWiFiGo</title>
+<style>body{font-family:system-ui,sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;background:#0b1220;color:#e8eefc;margin:0}div{text-align:center;padding:2rem}h1{font-size:2rem;margin:0 0 .5rem}p{color:#9db2d0}a{color:#6ea8ff}</style>
+</head>
+<body>
+<div>
+<h1>404</h1>
+<p id="msg">Checking for the right page…</p>
+<p><a href="https://www.chinawifigo.com/">Go to homepage</a></p>
+</div>
+<script>
+(function(){
+  var p = location.pathname;
+  function go(u){ location.replace(u); }
+  // /terms/ → /terms.html
+  if (/\/$/.test(p) && p !== '/') {
+    var cand = p.replace(/\/$/, '') + '.html';
+    fetch(cand, {method:'HEAD'}).then(function(r){ if(r.ok) go(cand); else msg(); }).catch(msg);
+  } else if (/\.html$/.test(p)) {
+    // /index-zh → /index-zh.html  (missing-extension style)
+    var c2 = p + '.html';
+    fetch(c2, {method:'HEAD'}).then(function(r){ if(r.ok) go(c2); else msg(); }).catch(msg);
+  } else msg();
+  function msg(){ document.getElementById('msg').textContent = 'Sorry, that page does not exist.'; }
+})();
+</script>
+</body>
+</html>
