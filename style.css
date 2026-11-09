@@ -1555,3 +1555,15 @@ a { color: inherit; text-decoration: none; transition: var(--transition-base); }
 
 /* 标题语义化改造：.lvl-hN 保留改动前的视觉尺寸（浏览器默认层级） */
 .lvl-h1{font-size:2em}.lvl-h2{font-size:1.5em}.lvl-h3{font-size:1.17em}.lvl-h4{font-size:1em}.lvl-h5{font-size:0.83em}.lvl-h6{font-size:0.67em}
+
+
+/* ===== On-this-page TOC（标题差异化 P1 自动生成） ===== */
+.toc{ margin:0 0 2rem; padding:1.25rem 1.5rem; background:var(--bg-secondary,#f8fafc);
+  border:1px solid rgba(15,23,42,.08); border-radius:var(--radius-lg); }
+.toc-title{ font-weight:700; font-size:.95rem; margin:0 0 .75rem; color:#334155; }
+.toc ul{ list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:2px 1.5rem; }
+.toc li{ margin:0; }
+.toc a{ display:block; font-size:.92rem; color:var(--primary); text-decoration:none; padding:3px 0; line-height:1.45; }
+.toc a:hover{ text-decoration:underline; }
+@media(max-width:640px){ .toc ul{ grid-template-columns:1fr; } }
