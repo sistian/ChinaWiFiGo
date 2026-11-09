@@ -1,7 +1,7 @@
 # ============================================
 # ChinaWiFiGo - Enhanced Robots.txt
 # Purpose: Guide legitimate crawlers, block malicious scanners
-# Domain: www.ChinaWiFiGo.com
+# Domain: www.chinawifigo.com
 # ============================================
 
 # ============================================
@@ -188,10 +188,10 @@ Disallow: /
 # ============================================
 # 9. SITEMAPS
 # ============================================
-Sitemap: https://www.ChinaWiFiGo.com/sitemap.xml
-Sitemap: https://www.ChinaWiFiGo.com/sitemap-images.xml
+Sitemap: https://www.chinawifigo.com/sitemap.xml
+Sitemap: https://www.chinawifigo.com/sitemap-images.xml
 
 # ============================================
 # 10. HOST DECLARATION
 # ============================================
-Host: www.ChinaWiFiGo.com
+Host: www.chinawifigo.com
