@@ -8,8 +8,8 @@
  * ============================================================ */
 (function () {
   // Supabase（独立项目，供 CWG 单独使用）
-  window.CWG_SB_URL = 'https://tybexleyjssmlqkuggdb.supabase.co';
-  window.CWG_SB_KEY = 'sb_publishable_qmWIGt374JA2r1keV07jCQ_xZ6B3GTR';
+  window.CWG_SB_URL = 'https://yidzgvcecvdmquamnwhf.supabase.co';
+  window.CWG_SB_KEY = 'sb_publishable_EVBwCA4IKTMQHxM0pfsyHg_uT43daCk';
 
   // 自建后端 API
   window.CWG_API_URL = 'https://api.chinawifigo.com';
